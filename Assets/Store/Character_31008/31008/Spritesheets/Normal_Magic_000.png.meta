@@ -300,7 +300,7 @@ TextureImporter:
         x: 1
         y: 104
         width: 72
-        height: 213
+        height: 138
       alignment: 9
       pivot: {x: 0.6805556, y: 0.09389672}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -321,7 +321,7 @@ TextureImporter:
         x: 191
         y: 782
         width: 89
-        height: 241
+        height: 149
       alignment: 9
       pivot: {x: 0.5955056, y: 0.10788382}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -339,10 +339,10 @@ TextureImporter:
       name: 10008
       rect:
         serializedVersion: 2
-        x: 98
-        y: 777
+        x: 99
+        y: 778
         width: 91
-        height: 246
+        height: 142
       alignment: 9
       pivot: {x: 0.6043956, y: 0.08943089}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -363,7 +363,7 @@ TextureImporter:
         x: 1
         y: 780
         width: 95
-        height: 243
+        height: 142
       alignment: 9
       pivot: {x: 0.55789477, y: 0.09465021}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -384,7 +384,7 @@ TextureImporter:
         x: 282
         y: 782
         width: 89
-        height: 241
+        height: 150
       alignment: 9
       pivot: {x: 0.58426964, y: 0.09128631}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -405,7 +405,7 @@ TextureImporter:
         x: 278
         y: 550
         width: 83
-        height: 230
+        height: 140
       alignment: 9
       pivot: {x: 0.5903614, y: 0.09565217}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -426,7 +426,7 @@ TextureImporter:
         x: 191
         y: 561
         width: 85
-        height: 219
+        height: 148
       alignment: 9
       pivot: {x: 0.7058824, y: 0.11872146}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -527,7 +527,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f9d9a087ec16ff747bccea2080126edb
     internalID: 0
     vertices: []
     indices: 
