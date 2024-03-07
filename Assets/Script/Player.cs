@@ -8,13 +8,22 @@ public class Player : MonoBehaviour
 
 
     private Vector3 moveDir = Vector3.zero;
-    private Vector2 MousePosition;
+    private Vector3 MousePosition;
 
     private float angle;
     private float moveSpeed;
     private bool move;
     private bool miss;
     private bool bow;
+    private bool knife01;
+    private bool knife02;
+    private bool flag;
+
+    public bool stance;//어떤 무기를 들고있는지(true: bow, false: knife)
+    public float stamina;
+    public float stamina_f;
+    public float stamina_max;
+    public float stamina_heal;
 
     void Start()
     {
@@ -25,6 +34,14 @@ public class Player : MonoBehaviour
         move = true;
         miss = true;
         bow = false;
+        stance = true;
+        knife01 = true;
+        knife02 = false;
+        flag = false;
+        stamina_max = 100;
+        stamina_heal = 1;
+        stamina = stamina_max;
+        stamina_f = stamina;
     }
 
     void Update()
@@ -33,42 +50,54 @@ public class Player : MonoBehaviour
         moveDir.x = Input.GetAxisRaw("Horizontal");
         moveDir.y = Input.GetAxisRaw("Vertical");
 
-
-        if (Input.GetMouseButton(0))
+        if (!bow && Input.GetKeyDown(KeyCode.R))
         {
-            //MousePosition = Input.mousePosition;
-            //MousePosition = camera.ScreenToWorldPoint(MousePosition);
-            MousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            angle = Mathf.Atan2(MousePosition.y - transform.position.y, MousePosition.x - transform.position.x) * Mathf.Rad2Deg;
+            if (stance)
+                stance = false;
+            else
+                stance = true;
+        }
+
+        if (stance && Input.GetMouseButton(0))
+        {
+            GetMouse();
+            STdown(1f,1f);
             bow = true;
             anim.SetBool("BowAttack", true);
         }
-        if (Input.GetMouseButtonUp(0))
+        if (stance && Input.GetMouseButtonUp(0))
         {
             bow = false;
             anim.SetBool("BowAttack", false);
         }
 
-        if (move && bow)
+        if(!stance && knife01&& Input.GetMouseButtonDown(0))
+        {
+            move = false;
+            knife01 = false;
+            GetMouse();
+            //anim.SetFloat("MouseDir", MouseResult());
+            anim.SetBool("KnifeAttack01", true);
+            StartCoroutine("Knife01");
+        }
+        if(knife02 && Input.GetMouseButtonDown(0))
+        {
+            knife02 = false;
+            GetMouse();
+            anim.SetBool("KnifeAttack02", true);
+            StartCoroutine("Knife02");
+        }
+
+        
+
+        if (!knife01 || knife02)
+        {
+            if (flag)
+                transform.position += (MousePosition - transform.position).normalized * Time.deltaTime * 15f;
+        }
+        else if (move && bow)
         {
             transform.position += moveDir.normalized * Time.deltaTime * (moveSpeed - 3f);
-            /*if (angle >= -22.5f && angle < 22.5f)
-                anim.SetFloat("MouseDir", 0f);
-            else if (angle >= 22.5f && angle < 67.5f)
-                anim.SetFloat("MouseDir", 1f);
-            else if (angle >= 67.5f && angle < 112.5f)
-                anim.SetFloat("MouseDir", 2f);
-            else if (angle >= 112.5f && angle < 157.5f)
-                anim.SetFloat("MouseDir", 3f);
-            else if (angle >= 157.5f || angle < -157.5f)
-                anim.SetFloat("MouseDir", 4f);
-            else if (angle >= -157.5f && angle < -112.5f)
-                anim.SetFloat("MouseDir", 5f);
-            else if (angle >= -112.5f && angle < -67.5f)
-                anim.SetFloat("MouseDir", 6f);
-            else if (angle >= -67.5f && angle < -22.5f)
-                anim.SetFloat("MouseDir", 7f);*/
-            anim.SetFloat("MouseDir", MouseResult());
             Space(moveDir);
 
         }
@@ -79,43 +108,17 @@ public class Player : MonoBehaviour
                 anim.SetBool("Move", true);
                 transform.position += moveDir.normalized * Time.deltaTime * moveSpeed;
 
-                /*if (moveDir.x > 0 && moveDir.y == 0)
-                {
-                    anim.SetFloat("MotionDir", 0f);
-                }
-                else if (moveDir.x > 0 && moveDir.y > 0)
-                {
-                    anim.SetFloat("MotionDir", 1f);
-                }
-                else if (moveDir.x == 0 && moveDir.y > 0)
-                {
-                    anim.SetFloat("MotionDir", 2f);
-                }
-                else if (moveDir.x < 0 && moveDir.y > 0)
-                {
-                    anim.SetFloat("MotionDir", 3f);
-                }
-                else if (moveDir.x < 0 && moveDir.y == 0)
-                {
-                    anim.SetFloat("MotionDir", 4f);
-                }
-                else if (moveDir.x < 0 && moveDir.y < 0)
-                {
-                    anim.SetFloat("MotionDir", 5f);
-                }
-                else if (moveDir.x == 0 && moveDir.y < 0)
-                {
-                    anim.SetFloat("MotionDir", 6f);
-                }
-                else if (moveDir.x > 0 && moveDir.y < 0)
-                {
-                    anim.SetFloat("MotionDir", 7f);
-                }*/
                 anim.SetFloat("MotionDir", MoveResult());
                 Space(moveDir);
             }
             else
                 anim.SetBool("Move", false);
+        }
+
+
+        if (stamina_f == stamina&&stamina_f<stamina_max)
+        {
+            StartCoroutine("stup");
         }
 
 
@@ -139,6 +142,15 @@ public class Player : MonoBehaviour
             return 6;
         else //if (moveDir.x > 0 && moveDir.y < 0)
             return 7;
+    }
+
+    private void GetMouse()
+    {
+        MousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        MousePosition.z = 0f;
+        angle = Mathf.Atan2(MousePosition.y - transform.position.y, MousePosition.x - transform.position.x) * Mathf.Rad2Deg;
+        anim.SetFloat("MouseDir", MouseResult());
+        anim.SetFloat("MotionDir", MouseResult());
     }
 
     private int MouseResult()
@@ -167,28 +179,110 @@ public class Player : MonoBehaviour
         {
             miss = false;
             move = false;
+            STdown(10f);
             anim.SetTrigger("Miss");
             StartCoroutine("MoveOn");
             StartCoroutine(Miss(vector));
         }
     }
 
-    WaitForSeconds wfs = new WaitForSeconds(0.5f);
-    WaitForSeconds wfs1 = new WaitForSeconds(0.05f);
+    private void STdown(float st)
+    {
+        StopCoroutine("stup");
+        if (stamina > 0)
+        {
+            stamina -= st;
+            stamina_f = stamina;
+        }
+        else
+            Debug.Log("stamina 부족");
+    }
+    private void STdown(float st, float t)
+    {
+        StopCoroutine("stup");
+
+    }
+    //여기부터 작업해야됨---------------------스태미나 보우 0.5초당 1씩 닳도록 구현
+    private IEnumerator stdown()
+    {
+        stamina -= 1;
+        stamina_f = stamina;
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+    }
+
+    /*private void STup()
+    {
+        StartCoroutine("stup");
+    }*/
+
+    private IEnumerator stup()
+    {
+        yield return YieldInstructionCache.WaitForSeconds(1f);
+
+        while (stamina < stamina_max)
+        {
+            stamina += stamina_heal;
+            yield return YieldInstructionCache.WaitForSeconds(0.01f);
+        }
+        if (stamina > stamina_max)
+        {
+            stamina = stamina_max;
+            stamina_f = stamina;
+        }
+    }
+
     private IEnumerator MoveOn()
     {
-        yield return wfs;
+        yield return YieldInstructionCache.WaitForSeconds(0.3f);
         move = true;
-        yield return wfs1;
+        yield return YieldInstructionCache.WaitForSeconds(0.05f);
         miss = true;
     }
 
     private IEnumerator Miss(Vector3 vec)
     {
+        knife01 = false;
         while (!move)
         {
-            transform.position += vec.normalized * Time.deltaTime * (moveSpeed + 3f);
+            transform.position += vec.normalized * Time.deltaTime * (moveSpeed + 5f);
             yield return null;
         }
+        knife01 = true;
+    }
+
+    private IEnumerator Knife01()
+    {
+        StartCoroutine(OnFlag(0.01f));
+        yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        knife02 = true;
+        yield return YieldInstructionCache.WaitForSeconds(0.2f);
+        if (!anim.GetBool("KnifeAttack02"))
+        {
+            anim.SetBool("KnifeAttack01", false);
+            knife02 = false;
+            knife01 = true;
+            move = true;
+        }
+    }
+
+    private IEnumerator Knife02()
+    {
+        StartCoroutine(OnFlag(0.02f));
+        yield return YieldInstructionCache.WaitForSeconds(0.7f);
+        anim.SetBool("KnifeAttack01", false);
+        anim.SetBool("KnifeAttack02", false);
+        
+        move = true;
+        yield return YieldInstructionCache.WaitForSeconds(0.1f);
+        knife01 = true;
+    }
+
+    private IEnumerator OnFlag(float t)
+    {
+        STdown(3f);
+        flag = true;
+        yield return YieldInstructionCache.WaitForSeconds(t);
+        flag = false;
+        
     }
 }
