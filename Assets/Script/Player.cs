@@ -42,10 +42,15 @@ public class Player : MonoBehaviour
         stamina_heal = 1;
         stamina = stamina_max;
         stamina_f = stamina;
+
+        StartCoroutine("stdown");
+        StartCoroutine("stup");
     }
 
     void Update()
     {
+        Debug.Log(stamina);
+
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -8.5f, 8.5f), Mathf.Clamp(transform.position.y, -4.9f, 3.8f));
         moveDir.x = Input.GetAxisRaw("Horizontal");
         moveDir.y = Input.GetAxisRaw("Vertical");
@@ -58,18 +63,28 @@ public class Player : MonoBehaviour
                 stance = true;
         }
 
-        if (stance && Input.GetMouseButton(0))
+        if (stance && stamina>2 &&Input.GetMouseButton(0))
         {
-            GetMouse();
-            STdown(1f,1f);
-            bow = true;
-            anim.SetBool("BowAttack", true);
+            if (stamina < 3)
+            {
+                bow = false;
+                anim.SetBool("BowAttack", false);
+
+            }
+            else
+            {
+                GetMouse();
+                STdown();
+                bow = true;
+                anim.SetBool("BowAttack", true);
+            }
         }
         if (stance && Input.GetMouseButtonUp(0))
         {
             bow = false;
             anim.SetBool("BowAttack", false);
         }
+        
 
         if(!stance && knife01&& Input.GetMouseButtonDown(0))
         {
@@ -118,7 +133,7 @@ public class Player : MonoBehaviour
 
         if (stamina_f == stamina&&stamina_f<stamina_max)
         {
-            StartCoroutine("stup");
+            //StartCoroutine("stup");
         }
 
 
@@ -175,7 +190,7 @@ public class Player : MonoBehaviour
 
     private void Space(Vector3 vector)
     {
-        if (miss && Input.GetKeyDown(KeyCode.Space))
+        if (miss && stamina>10 && Input.GetKeyDown(KeyCode.Space))
         {
             miss = false;
             move = false;
@@ -188,26 +203,42 @@ public class Player : MonoBehaviour
 
     private void STdown(float st)
     {
-        StopCoroutine("stup");
+        //StopCoroutine("stup");
         if (stamina > 0)
         {
             stamina -= st;
-            stamina_f = stamina;
+            //stamina_f = stamina;
         }
         else
             Debug.Log("stamina 부족");
+        //StartCoroutine("stup");
     }
-    private void STdown(float st, float t)
+    private void STdown()
     {
-        StopCoroutine("stup");
+        //StopCoroutine("stup");
+
+        //StartCoroutine("stdown");
 
     }
     //여기부터 작업해야됨---------------------스태미나 보우 0.5초당 1씩 닳도록 구현
     private IEnumerator stdown()
     {
-        stamina -= 1;
-        stamina_f = stamina;
-        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        while (true)
+        {
+            if (bow&&stamina>1)
+            {
+                //Debug.Log("공격");
+                stamina -= 1;
+                yield return null;
+                //stamina_f = stamina;
+                yield return YieldInstructionCache.WaitForSeconds(0.5f);
+            }
+            else
+            {
+                //StartCoroutine("stup");
+                yield return null;
+            }
+        }
     }
 
     /*private void STup()
@@ -217,17 +248,31 @@ public class Player : MonoBehaviour
 
     private IEnumerator stup()
     {
-        yield return YieldInstructionCache.WaitForSeconds(1f);
-
-        while (stamina < stamina_max)
+        while (true)
         {
-            stamina += stamina_heal;
-            yield return YieldInstructionCache.WaitForSeconds(0.01f);
-        }
-        if (stamina > stamina_max)
-        {
-            stamina = stamina_max;
             stamina_f = stamina;
+            yield return YieldInstructionCache.WaitForSeconds(1f);
+
+            if (stamina_f == stamina && stamina_f < stamina_max)
+            {
+                //yield return YieldInstructionCache.WaitForSeconds(1f);
+
+                while (stamina < stamina_max)
+                {
+                    stamina += stamina_heal;
+                    stamina_f = stamina;
+                    yield return YieldInstructionCache.WaitForSeconds(1f);
+                    if (stamina_f != stamina)
+                        break;
+                }
+                if (stamina > stamina_max)
+                {
+                    stamina = stamina_max;
+                    stamina_f = stamina;
+                }
+            }
+            else
+                yield return null;
         }
     }
 
@@ -253,7 +298,7 @@ public class Player : MonoBehaviour
     private IEnumerator Knife01()
     {
         StartCoroutine(OnFlag(0.01f));
-        yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        yield return YieldInstructionCache.WaitForSeconds(0.15f);
         knife02 = true;
         yield return YieldInstructionCache.WaitForSeconds(0.2f);
         if (!anim.GetBool("KnifeAttack02"))
@@ -268,7 +313,7 @@ public class Player : MonoBehaviour
     private IEnumerator Knife02()
     {
         StartCoroutine(OnFlag(0.02f));
-        yield return YieldInstructionCache.WaitForSeconds(0.7f);
+        yield return YieldInstructionCache.WaitForSeconds(0.4f);
         anim.SetBool("KnifeAttack01", false);
         anim.SetBool("KnifeAttack02", false);
         
