@@ -5,10 +5,17 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Animator anim;
+    private ParticleSystem At1;
+    private ParticleSystem At2;
+
+    private GameObject obj;
+    private GameObject obj1;
+    private GameObject obj2;
 
 
     private Vector3 moveDir = Vector3.zero;
     private Vector3 MousePosition;
+    private Vector3 bowPos;
 
     private float angle;
     private float moveSpeed;
@@ -29,6 +36,14 @@ public class Player : MonoBehaviour
     {
         if (!TryGetComponent<Animator>(out anim))
             Debug.Log("Player.cs - Start() - anim 참조 오류");
+        obj1 = GameObject.Find("AtPt1");
+        obj2 = GameObject.Find("AtPt2");
+        if (!obj1.TryGetComponent<ParticleSystem>(out At1))
+            Debug.Log("Player.cs - Start() - At1 참조 오류");
+        if (!obj2.TryGetComponent<ParticleSystem>(out At2))
+            Debug.Log("Player.cs - Start() - At2 참조 오류");
+
+
 
         moveSpeed = 5f;
         move = true;
@@ -42,6 +57,9 @@ public class Player : MonoBehaviour
         stamina_heal = 1;
         stamina = stamina_max;
         stamina_f = stamina;
+
+        At1.Stop();
+        At2.Stop();
 
         StartCoroutine("stdown");
         StartCoroutine("stup");
@@ -86,7 +104,7 @@ public class Player : MonoBehaviour
         }
         
 
-        if(!stance && knife01&& Input.GetMouseButtonDown(0))
+        if(stamina >3&&!stance && knife01&& Input.GetMouseButtonDown(0))
         {
             move = false;
             knife01 = false;
@@ -94,13 +112,15 @@ public class Player : MonoBehaviour
             //anim.SetFloat("MouseDir", MouseResult());
             anim.SetBool("KnifeAttack01", true);
             StartCoroutine("Knife01");
+            At1.Play();
         }
-        if(knife02 && Input.GetMouseButtonDown(0))
+        if(stamina > 3 && knife02 && Input.GetMouseButtonDown(0))
         {
             knife02 = false;
             GetMouse();
             anim.SetBool("KnifeAttack02", true);
             StartCoroutine("Knife02");
+            At2.Play();
         }
 
         
@@ -139,6 +159,20 @@ public class Player : MonoBehaviour
 
     }
 
+    private Vector3 hitSize = new Vector3(2.5f, 4f, 0f);
+    private Vector3 hitPos;
+    private void Hit(float damage)
+    {
+        hitPos = (MousePosition - transform.position).normalized;
+        hitPos *= 1.5f;
+
+        Collider2D[] hit = Physics2D.OverlapBoxAll(hitPos, hitSize,angle);
+        foreach(Collider2D col in hit)
+        {
+            //if(col.TryGetComponent<IDamage>(out IDamege idamage)) { }
+        }
+    }
+
     private int MoveResult()
     {
         if (moveDir.x > 0 && moveDir.y == 0)
@@ -164,6 +198,11 @@ public class Player : MonoBehaviour
         MousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         MousePosition.z = 0f;
         angle = Mathf.Atan2(MousePosition.y - transform.position.y, MousePosition.x - transform.position.x) * Mathf.Rad2Deg;
+        if (!bow)
+        {
+            obj1.transform.rotation = Quaternion.Euler(180f, 0f, -angle + 180f);
+            obj2.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180f);
+        }
         anim.SetFloat("MouseDir", MouseResult());
         anim.SetFloat("MotionDir", MouseResult());
     }
@@ -225,12 +264,15 @@ public class Player : MonoBehaviour
     {
         while (true)
         {
-            if (bow&&stamina>1)
+            if (bow&&stamina>2)
             {
                 //Debug.Log("공격");
                 stamina -= 1;
-                yield return null;
-                //stamina_f = stamina;
+                obj = PoolManager.Inst.pools[0].Pop();
+                bowPos = transform.position;
+                bowPos.y += 0.5f;
+                obj.transform.position = bowPos;
+                obj.transform.rotation = Quaternion.Euler(0f, 0f, angle);
                 yield return YieldInstructionCache.WaitForSeconds(0.5f);
             }
             else
@@ -261,7 +303,7 @@ public class Player : MonoBehaviour
                 {
                     stamina += stamina_heal;
                     stamina_f = stamina;
-                    yield return YieldInstructionCache.WaitForSeconds(1f);
+                    yield return YieldInstructionCache.WaitForSeconds(0.05f);
                     if (stamina_f != stamina)
                         break;
                 }
@@ -324,7 +366,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator OnFlag(float t)
     {
-        STdown(3f);
+        STdown(2f);
         flag = true;
         yield return YieldInstructionCache.WaitForSeconds(t);
         flag = false;
