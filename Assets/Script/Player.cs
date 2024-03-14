@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamage
 {
     private Animator anim;
     private ParticleSystem At1;
@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     public float stamina_max;
     public float stamina_heal;
 
-    void Start()
+    void Awake()
     {
         if (!TryGetComponent<Animator>(out anim))
             Debug.Log("Player.cs - Start() - anim 참조 오류");
@@ -371,5 +371,10 @@ public class Player : MonoBehaviour
         yield return YieldInstructionCache.WaitForSeconds(t);
         flag = false;
         
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log($"{damage}만큼의 데미지를 입음");
     }
 }
