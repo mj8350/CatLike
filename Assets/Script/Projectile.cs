@@ -10,7 +10,7 @@ public class Projectile : PoolLabel
 
     private Vector3 moveDir;
     private float moveSpeed;
-    private Vector3 DefaultScale = new Vector3(0.5f, 0.5f, 0.5f);
+    private Vector3 DefaultScale = new Vector3(0.6f, 0.6f, 0.6f);
 
     private Transform player;
 

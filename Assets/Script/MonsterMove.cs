@@ -10,6 +10,8 @@ public class MonsterMove : MonoBehaviour
 
     private Vector3 moveDir;
 
+    private bool rush;
+
     public float moveSpeed;
 
     private void Awake()
@@ -20,25 +22,46 @@ public class MonsterMove : MonoBehaviour
         if(!TryGetComponent<Animator>(out anim))
             Debug.Log("MonsterMove.cs - Awake() - anim 참조 실패");
         moveSpeed = 0;
+        rush = false;
+    }
+
+    public void MoveRushOn(float speed, Vector3 newdir)
+    {
+        moveDir = newdir;
+        moveSpeed = speed;
+        rush = true;
+    }
+    public void MoveRushOff()
+    {
+        moveSpeed = 0;
+        rush = false;
     }
 
     void Update()
     {
-        moveDir = (player.position - transform.position).normalized;
-        if (moveDir.x < 0f)
-            sr.flipX = true;
-        else
-            sr.flipX = false;
-
+        
         if (moveSpeed != 0f)
         {
-            transform.position += moveDir * moveSpeed * Time.deltaTime;
-            anim.SetBool("Move", true);
+            if (!rush)
+            {
+                moveDir = (player.position - transform.position).normalized;
+                transform.position += moveDir * moveSpeed * Time.deltaTime;
+                anim.SetBool("Move", true);
+            }
+            else
+            {
+                transform.position += moveDir * moveSpeed * Time.deltaTime;
+            }
         }
         else
         {
             anim.SetBool("Move", false);
         }
+
+        if (moveDir.x < 0f)
+            sr.flipX = true;
+        else
+            sr.flipX = false;
 
         if (Input.GetKeyDown(KeyCode.G))
             StartCoroutine("ToMove");
