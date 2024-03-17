@@ -44,7 +44,7 @@ public class Projectile : PoolLabel
         yield return YieldInstructionCache.WaitForSeconds(0.5f);
         isSetDir = true;
         StartCoroutine("FMove");
-        yield return YieldInstructionCache.WaitForSeconds(2f);
+        yield return YieldInstructionCache.WaitForSeconds(1f);
         StopCoroutine("FMove");
 
 

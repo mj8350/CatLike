@@ -4,11 +4,12 @@ using UnityEngine;
 
 public enum AttackType
 {
-    CircleFire01, // 전방향 발사
+    CircleFire01, // 전방향 10발사
     ThreeFire01, //플레이어방향 3발
     Fire323, //플레이어 방향으로 323돌진
     Baby01, //애기초코 소환
     FollowFire01, //플레이어 추적 발사
+    SpwanThorn01, //가시 소환하는 warning생성
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -71,7 +72,10 @@ public class MonsterAttack : MonoBehaviour
                 baby01();
                 break;
             case AttackType.FollowFire01:
-
+                followFire01();
+                break;
+            case AttackType.SpwanThorn01:
+                spwanThorn();
                 break;
         }
     }
@@ -86,16 +90,16 @@ public class MonsterAttack : MonoBehaviour
     }
     private void Circle01()
     {
-        for(int i = 0; i<attackCount; i++)
+        for (int i = 0; i < attackCount; i++)
         {
-            obj = PoolManager.Inst.pools[1].Pop();
+            obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
             obj.transform.position = shoot.transform.position; //+ center;
             angle = intervalAngle * i;
             dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
             dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
-            if(obj.TryGetComponent<Projectile>(out Projectile projectile))
+            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
             {
-                projectile.MoveTo1(dir, 5f,dftScale);
+                projectile.MoveTo1(dir, 5f, dftScale);
             }
         }
     }
@@ -114,7 +118,7 @@ public class MonsterAttack : MonoBehaviour
         dir = Quaternion.AngleAxis(-intervalAngle * 2f, Vector3.forward) * dir;
         for (int i = 0; i < attackCount; i++)
         {
-            obj = PoolManager.Inst.pools[1].Pop();
+            obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
             obj.transform.position = shoot.transform.position; //+ center;
 
             dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
@@ -149,14 +153,14 @@ public class MonsterAttack : MonoBehaviour
     }
     private void fire323()
     {
-        if(attackCount == 3)
+        if (attackCount == 3)
             dir = Quaternion.AngleAxis(-intervalAngle * 2f, Vector3.forward) * Mdir;
         else
             dir = Quaternion.AngleAxis(-(intervalAngle / 2f * 3f), Vector3.forward) * Mdir;
 
         for (int i = 0; i < attackCount; i++)
         {
-            obj = PoolManager.Inst.pools[1].Pop();
+            obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
             obj.transform.position = shoot.transform.position; //+ center;
 
             dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
@@ -178,28 +182,50 @@ public class MonsterAttack : MonoBehaviour
 
     private void baby01()
     {
-        obj = PoolManager.Inst.pools[2].Pop();
+        obj = PoolManager.Inst.pools[(int)PoolState.miniChoco].Pop();
         obj.transform.position = transform.position;
+        if (obj.TryGetComponent<MiniChoco>(out MiniChoco mini))
+            mini.miniOn();
     }
 
-    //private IEnumerator FollowFire01()
-    //{
-        
-    //}
+    private IEnumerator FollowFire01()
+    {
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
 
     private void followFire01()
     {
-        for (int i = 0; i < 3; i++)
+        obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+        obj.transform.position = shoot.transform.position;
+        if (obj.TryGetComponent<Projectile>(out Projectile projectile))
         {
-            obj = PoolManager.Inst.pools[1].Pop();
-            obj.transform.position = shoot.transform.position;
-            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
-            {
-                projectile.MoveTo2(5f, dftScale);
-            }
+            projectile.MoveTo2(4f, dftScale);
         }
     }
 
+
+
+    #endregion
+
+    #region Grape
+    private IEnumerator SpwanThorn01()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            anim.SetTrigger("Attack");
+            yield return YieldInstructionCache.WaitForSeconds(1f);
+        }
+    }
+
+    private void spwanThorn()
+    {
+        obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+        obj.transform.position = player.position;
+        if(obj.TryGetComponent<Warning>(out Warning warning)){
+            warning.SetType(PoolState.thorn);
+        }
+    }
 
 
     #endregion

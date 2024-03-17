@@ -26,7 +26,7 @@ public class OneAi : MonoBehaviour
         if (!TryGetComponent<MonsterAttack>(out attack))
             Debug.Log("OneAi.cs - Awake() - attack 참조 실패");
 
-        StartCoroutine(OneCreat(new Vector3(-3f, 0f, 0f)));
+        StartCoroutine(OneCreat(new Vector3(3f, 0f, 0f)));
     }
 
     

@@ -67,7 +67,7 @@ public class Player : MonoBehaviour, IDamage
 
     void Update()
     {
-        Debug.Log(stamina);
+        //Debug.Log(stamina);
 
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -8.5f, 8.5f), Mathf.Clamp(transform.position.y, -4.9f, 3.8f));
         moveDir.x = Input.GetAxisRaw("Horizontal");
@@ -268,7 +268,7 @@ public class Player : MonoBehaviour, IDamage
             {
                 //Debug.Log("АјАн");
                 stamina -= 1;
-                obj = PoolManager.Inst.pools[0].Pop();
+                obj = PoolManager.Inst.pools[(int)PoolState.bow].Pop();
                 bowPos = transform.position;
                 bowPos.y += 0.5f;
                 obj.transform.position = bowPos;

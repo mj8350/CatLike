@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PoolState
+{
+    bow = 0,
+    projectile,
+    miniChoco,
+    warning,
+    thorn,
+    ice,
+}
 public class PoolManager : MonoBehaviour
 {
     private static PoolManager instance;
