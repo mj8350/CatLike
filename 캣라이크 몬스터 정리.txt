@@ -113,3 +113,62 @@
 
 
 애니메이션 최적화 (GPU인스턴싱 기법)
+컴포넌트 패턴(디자인패턴)으로 몬스터 기믹 구현해보기
+옵저버 패턴(오브젝트 상태값 변화에 따른)일시정지기능?
+
+
+
+
+데이터 테이블
+
+엑셀 데이터 생성
+
+셀 이름 바꾸기
+1라인 - 아이디, 데미지, hp ......
+2라인 - 10001, 5, 100 ........
+3라인 - 10002, 10, 1000 ........
+
+
+다른이름으로 저장 - pc - 바탕화면 - MonsterInfo.csv 파일형식 CSV UTF-8(쉼표로 분리)
+로 저장
+xlsx도 가능
+
+저장된 파일 에셋에 적용
+
+
+엑셀파일로 가져오는 데이터테이블
+https://github.com/mikito/unity-excel-importer
+
+다운로드 진행 - 압축 해제 - 에셋 폴더에 ExcelImpoter를 본인 게임 에셋에
+끌고오기
+
+스크립트 파일 생성
+[System.Serializable]
+public class MonsterData{
+public int PowName;
+public int Damage;
+public int HP;
+......
+}//데이터에 대한 구조체 생성
+
+엑셀 우클릭 크리에이트 제일 아래 엑셀에셋스크립트
+에셋 폴더에 생성. 그러면 똑같은 이름의 스크립트 생성.
+그걸 더블클릭 한 후 주석 해제
+
+리스트 데이터 타입에 스크립트 이름 적용.(MonsterData)
+엑셀 우클릭 Reimport 누르면 스크립터블오브젝트 생성.
+
+
+사용방법
+[SerializeField]
+Table table; <<여기에 만든 에셋 인스펙터창에서 가져오기
+
+Dictionary<int,MonsterData> monsterTables = new Dictionary<int, MonsterData>();
+
+monsterTables.Add(table.MonsterInfo[i].RowName, table.MonsterInfo[i]);
+monsterTables[10001].Damage
+
+table.MonsterInfo[0].RowName
+table.MonsterInfo[0].Damage
+table.MonsterInfo[0].HP
+
