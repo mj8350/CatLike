@@ -12,6 +12,8 @@ public enum AttackType
     SpwanThorn01, //가시 소환하는 warning생성
     Front323, //플레이어 방향으로 3 2 3 발사
     FrontWing01, //플레이어 방향으로 돌진하면서 날개발사
+    Sniping01, //저격
+    Fire5, //플레이어 방향 5개 빠르게 날리기
 
 }
 
@@ -86,6 +88,13 @@ public class MonsterAttack : MonoBehaviour
             case AttackType.FrontWing01:
                 StartCoroutine("frontWing01");
                 break;
+            case AttackType.Sniping01:
+                sniping();
+                break;
+            case AttackType.Fire5:
+                StartCoroutine("fire5");
+                break;
+
         }
     }
 
@@ -316,6 +325,40 @@ public class MonsterAttack : MonoBehaviour
 
     #region Bear_CB
 
+    private IEnumerator Sniping01()
+    {
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+    private void sniping()
+    {
+        obj = PoolManager.Inst.pools[(int)PoolState.alertLine].Pop();
+        obj.transform.position = shoot.transform.position;
+    }
+
+    private IEnumerator Fire5()
+    {
+        attackCount = 5;
+        attackRate = 0.1f;
+        anim.SetTrigger("Attack");
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        Mdir = (player.position - shoot.transform.position).normalized;
+    }
+    private IEnumerator fire5()
+    {
+        for(int i = 0; i < attackCount; i++)
+        {
+            yield return YieldInstructionCache.WaitForSeconds(attackRate);
+
+            obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+            obj.transform.position = shoot.transform.position; //+ center;
+            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                projectile.MoveTo1(Mdir, 20f, dftScale);
+            }
+            
+        }
+    }
 
 
     #endregion

@@ -12,6 +12,7 @@ public enum PoolState
     ice,
     alertLine,
     arrowEnemy,
+    boom,
 }
 public class PoolManager : MonoBehaviour
 {
