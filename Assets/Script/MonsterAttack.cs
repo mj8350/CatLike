@@ -10,6 +10,9 @@ public enum AttackType
     Baby01, //애기초코 소환
     FollowFire01, //플레이어 추적 발사
     SpwanThorn01, //가시 소환하는 warning생성
+    Front323, //플레이어 방향으로 3 2 3 발사
+    FrontWing01, //플레이어 방향으로 돌진하면서 날개발사
+
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -76,6 +79,12 @@ public class MonsterAttack : MonoBehaviour
                 break;
             case AttackType.SpwanThorn01:
                 spwanThorn();
+                break;
+            case AttackType.Front323:
+                StartCoroutine("front323");
+                break;
+            case AttackType.FrontWing01:
+                StartCoroutine("frontWing01");
                 break;
         }
     }
@@ -230,4 +239,84 @@ public class MonsterAttack : MonoBehaviour
 
     #endregion
 
+    #region Bear_SP
+    private IEnumerator Front323()
+    {
+        attackRate = 0.5f;
+        attackCount = 3;
+        intervalAngle = 30f;
+        anim.SetTrigger("Attack");
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        Mdir = (player.position - shoot.transform.position).normalized;
+
+    }
+    private IEnumerator front323()
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (attackCount == 3)
+                dir = Quaternion.AngleAxis(-intervalAngle * 2f, Vector3.forward) * Mdir;
+            else
+                dir = Quaternion.AngleAxis(-(intervalAngle / 2f * 3f), Vector3.forward) * Mdir;
+
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position; //+ center;
+
+                dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, midScale);
+                }
+            }
+            yield return YieldInstructionCache.WaitForSeconds(attackRate);
+            if (attackCount == 3)
+                attackCount--;
+            else
+                attackCount++;
+
+        }
+    }
+
+    private IEnumerator FrontWing01()
+    {
+        attackRate = 0.1f;
+        attackCount = 2;
+        intervalAngle = 180f;
+        Mdir = (player.position - shoot.transform.position).normalized;
+        anim.SetTrigger("Attack");
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        movement.MoveRushOn(3f, Mdir);
+        dir = Quaternion.AngleAxis(-90, Vector3.forward) * Mdir;
+        yield return YieldInstructionCache.WaitForSeconds(2);
+        
+        movement.MoveRushOff();
+    }
+    private IEnumerator frontWing01()
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            yield return YieldInstructionCache.WaitForSeconds(attackRate);
+
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position; //+ center;
+
+                dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, dftScale);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Bear_CB
+
+
+
+    #endregion
 }

@@ -10,6 +10,8 @@ public enum PoolState
     warning,
     thorn,
     ice,
+    alertLine,
+    arrowEnemy,
 }
 public class PoolManager : MonoBehaviour
 {

@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class Arrow : PoolLabel
 {
+    [SerializeField]
     private float moveSpeed;
 
-    void Start()
-    {
-        moveSpeed = 40f;
-    }
-
-    
     void Update()
     {
         transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
