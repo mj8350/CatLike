@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7617765031758166274}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 6214258044501135347}
   - component: {fileID: 3513550444396701191}
   - component: {fileID: 1813140824253668512}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MiniChoco
   m_TagString: Untagged
   m_Icon: {fileID: 0}

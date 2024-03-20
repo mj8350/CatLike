@@ -20,7 +20,7 @@ public class Player : MonoBehaviour, IDamage
     private float angle;
     private float moveSpeed;
     private bool move;
-    private bool miss;
+    public bool miss;
     private bool bow;
     private bool knife01;
     private bool knife02;

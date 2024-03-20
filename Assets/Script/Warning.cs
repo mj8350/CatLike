@@ -8,6 +8,7 @@ public class Warning : PoolLabel
 
     private GameObject obj;
 
+    public bool iceBorn = false;
 
 
     public void SetType(PoolState poolState)
@@ -23,6 +24,11 @@ public class Warning : PoolLabel
         {
             thorn.ThornUp();
         }
+        if(obj.TryGetComponent<Ice>(out Ice ice)&&iceBorn)
+		{
+            ice.IcePop();
+		}
+        iceBorn = false;
         ReturnPool();
     }
     

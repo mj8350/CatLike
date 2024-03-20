@@ -15,7 +15,9 @@ GameObject:
   - component: {fileID: 2139894840670679651}
   - component: {fileID: 2139894840670679648}
   - component: {fileID: 2139894840670679650}
-  m_Layer: 0
+  - component: {fileID: 5444194053329151141}
+  - component: {fileID: 8442473305700431640}
+  m_Layer: 7
   m_Name: Grape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff1c585492b5b94ba5cb72de1bd7e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveS: 2
-  time: 0
+  moveS: 0.1
+  time: 0.1
   type1: 0
   time1: 3
   type2: 5
@@ -166,6 +168,43 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!70 &5444194053329151141
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139894840670679673}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.4}
+  m_Size: {x: 1, y: 0.6}
+  m_Direction: 1
+--- !u!50 &8442473305700431640
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139894840670679673}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &2139894841955848334
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2139894841955848335}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}

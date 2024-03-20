@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5024897912295600956}
   - component: {fileID: 8161667907315802630}
   - component: {fileID: 3079470293558316357}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Thorn
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -17,16 +17,19 @@ public class ArrowEnemy : PoolLabel
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<IDamage>(out IDamage damage))
+        if (collision.TryGetComponent<Player>(out Player player) && player.miss)
         {
-            damage.TakeDamage(5);
-            obj = PoolManager.Inst.pools[(int)PoolState.boom].Pop();
-            obj.transform.position = transform.position;
-            if(obj.TryGetComponent<Boom>(out Boom boom))
+            if (collision.TryGetComponent<IDamage>(out IDamage damage))
             {
-                boom.BoomOff();
+                damage.TakeDamage(5);
+                obj = PoolManager.Inst.pools[(int)PoolState.boom].Pop();
+                obj.transform.position = transform.position;
+                if (obj.TryGetComponent<Boom>(out Boom boom))
+                {
+                    boom.BoomOff();
+                }
+                ReturnPool();
             }
-            ReturnPool();
         }
     }
 }
