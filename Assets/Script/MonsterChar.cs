@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterChar : PoolLabel, IDamage
+public class MonsterChar : PoolLabel
 {
     public float HP;
 
@@ -15,23 +15,22 @@ public class MonsterChar : PoolLabel, IDamage
 	{
 		if (HP <= 0)
 		{
-			//ReturnPool();
-			Destroy(gameObject);
-			HP = 30f;
+			StartCoroutine("Die");
+			//Destroy(gameObject);
+			
 		}
 	}
-
-	public void TakeDamage(float damage)
-    {
-        Debug.Log($"몬스터가 {damage}의 데미지를 입음");
-		HP -= damage;
-    }
-
-	private void OnCollisionEnter2D(Collision2D collision)
+	private void FixedUpdate()
 	{
-		if(collision.gameObject.TryGetComponent<IDamage>(out IDamage damage))
-		{
-			damage.TakeDamage(5f);
-		}
+		
 	}
+
+	private IEnumerator Die()
+	{
+		yield return YieldInstructionCache.WaitForSeconds(0.1f);
+		ReturnPool();
+		HP = 30f;
+	}
+
+
 }

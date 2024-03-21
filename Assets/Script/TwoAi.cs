@@ -28,18 +28,19 @@ public class TwoAi : MonoBehaviour
             Debug.Log("TwoAi.cs - Awake() - movement 참조 실패");
         if (!TryGetComponent<MonsterAttack>(out attack))
             Debug.Log("TwoAi.cs - Awake() - attack 참조 실패");
-
-        StartCoroutine(TwoCreat(new Vector3(-3f, 0f, 0f)));
+    }
+	private void Start()
+	{
+        //StartCoroutine(TwoCreat(new Vector3(-3f, 0f, 0f)));
     }
 
-    //public void TwoCreat(Vector3 vec)
-    //{
-    //    transform.position = vec;
-    //    ChangeState(TwoState.ToMove);
-    //}
-    public IEnumerator TwoCreat(Vector3 vec)
+	public void Creat()
+	{
+        StartCoroutine("TwoCreat");
+    }
+	public IEnumerator TwoCreat()
     {
-        transform.position = vec;
+        //transform.position = vec;
         yield return YieldInstructionCache.WaitForSeconds(1f);
         ChangeState(TwoState.ToMove);
     }

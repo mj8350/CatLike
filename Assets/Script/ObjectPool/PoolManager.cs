@@ -13,6 +13,18 @@ public enum PoolState
     alertLine,
     arrowEnemy,
     boom,
+    bubble,
+
+    slime,
+    snake,
+    choco,
+    grape,
+    bear_CB,
+    bear_SP,
+    pudding,
+    shark,
+    slime_Mid,
+    slime_Boss,
 }
 public class PoolManager : MonoBehaviour
 {

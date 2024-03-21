@@ -85,6 +85,33 @@ public class Projectile : PoolLabel
 		transform.localScale = DefaultScale;
 	}
 
+	public void BubblePop()
+	{
+		StartCoroutine("Bubble");
+	}
+
+	private GameObject obj;
+	private float angle;
+	private Vector3 dir;
+	private Vector3 dftScale = new Vector3(0.6f, 0.6f, 0.6f);
+	private IEnumerator Bubble()
+	{
+		yield return YieldInstructionCache.WaitForSeconds(2);
+		for (int i = 0; i < 16; i++)
+		{
+			obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+			obj.transform.position = transform.position;
+			angle = 22.5f * i;
+			dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+			dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+			if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+			{
+				projectile.MoveTo1(dir, 5f, dftScale);
+			}
+		}
+		ReturnPool();
+	}
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 

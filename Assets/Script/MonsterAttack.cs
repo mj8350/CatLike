@@ -17,6 +17,7 @@ public enum AttackType
     Bogle01, //플레이어 방향 16개 보글보글
     CircleFire02, //전방향 큰거 6개 느리게발사
     FrontWing02, //상어 돌진
+    SlimeBubble, //슬라임 큰 버블
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -42,6 +43,7 @@ public class MonsterAttack : MonoBehaviour
 
     private Vector3 dftScale = new Vector3(0.6f, 0.6f, 0.6f);
     private Vector3 midScale = new Vector3(0.8f, 0.8f, 0.8f);
+    private Vector3 oriScale = new Vector3(1f, 1f, 1f);
     private Vector3 bigScale = new Vector3(1.5f, 1.5f, 1.5f);
 
     private void Awake()
@@ -106,7 +108,9 @@ public class MonsterAttack : MonoBehaviour
                 StartCoroutine("frontWing01");
                 StartCoroutine("spwanIce");
                 break;
-
+            case AttackType.SlimeBubble:
+                slimeBubble();
+                break;
 
         }
     }
@@ -478,6 +482,35 @@ public class MonsterAttack : MonoBehaviour
             }
         }
 	}
+
+	#endregion
+
+	#region Boss_Slime
+    private IEnumerator SlimeBubble()
+	{
+        attackCount = 8;
+        intervalAngle = 360f / attackCount;
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+    private void slimeBubble()
+    {
+        for (int i = 0; i < attackCount; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.bubble].Pop();
+            obj.transform.position = shoot.transform.position; //+ center;
+            angle = intervalAngle * i;
+            dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+            dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                projectile.MoveTo1(dir, 2.5f, oriScale);
+                projectile.BubblePop();
+            }
+        }
+    }
+
+
 
     #endregion
 }
