@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Thorn : PoolLabel
 {
-    public void ThornUp()
+    private float TT;
+    public void ThornUp(float time)
     {
+        TT = time;
         StartCoroutine("Up");
     }
 
     private IEnumerator Up()
     {
-        yield return YieldInstructionCache.WaitForSeconds(3f);
+        yield return YieldInstructionCache.WaitForSeconds(TT);
         ReturnPool();
     }
 }

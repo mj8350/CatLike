@@ -18,6 +18,9 @@ public enum AttackType
     CircleFire02, //전방향 큰거 6개 느리게발사
     FrontWing02, //상어 돌진
     SlimeBubble, //슬라임 큰 버블
+    GrapeCircleFire, //포도 전방향20개 3번
+    GrapeCircleThorn, //원형 나선 가시
+    GrapeThorn, // 플레이어 추적 가시
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -36,8 +39,10 @@ public class MonsterAttack : MonoBehaviour
     private Transform player;
     private GameObject obj;
     private float angle;
-    private Vector2 dir;
+    private Vector3 dir = Vector3.zero;
     private Vector3 Mdir;
+
+    private bool grapebool;
 
     //private Vector3 center = new Vector3(0f, 0.5f, 0f);
 
@@ -55,6 +60,7 @@ public class MonsterAttack : MonoBehaviour
         shoot = transform.Find("ShootPos").gameObject;
 
         player = GameObject.Find("Player").transform;
+        grapebool = true;
     }
 
     public void AttackActive(AttackType newAttack)
@@ -111,6 +117,29 @@ public class MonsterAttack : MonoBehaviour
             case AttackType.SlimeBubble:
                 slimeBubble();
                 break;
+            case AttackType.GrapeCircleFire:
+                StartCoroutine("grapeCircleFire");
+                break;
+            case AttackType.GrapeCircleThorn:
+                StartCoroutine("grapeCircleThorn");
+                break;
+            case AttackType.GrapeThorn:
+                switch (Thorntype)
+                {
+                    case 1:
+                        grapeThorn1();
+                        break;
+                    case 2:
+                        grapeThorn2();
+                        break;
+                    case 3:
+                        grapeThorn1();
+                        grapeThorn3();
+                        break;
+                }
+
+                break;
+
 
         }
     }
@@ -258,7 +287,7 @@ public class MonsterAttack : MonoBehaviour
         obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
         obj.transform.position = player.position;
         if(obj.TryGetComponent<Warning>(out Warning warning)){
-            warning.SetType(PoolState.thorn);
+            warning.SetType(PoolState.thorn, 3f);
         }
     }
 
@@ -477,7 +506,7 @@ public class MonsterAttack : MonoBehaviour
             obj.transform.position = transform.position;
             if (obj.TryGetComponent<Warning>(out Warning warning))
             {
-                warning.SetType(PoolState.ice);
+                warning.SetType(PoolState.ice,0f);
                 //warning.iceBorn = true;
             }
         }
@@ -510,6 +539,173 @@ public class MonsterAttack : MonoBehaviour
         }
     }
 
+
+
+    #endregion
+
+    #region Boss_Greap
+    private IEnumerator GrapeCircleFire()
+	{
+        attackCount = 20;
+        intervalAngle = 360f / attackCount;
+        weightAngle = intervalAngle / 2;
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+    private IEnumerator grapeCircleFire()
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position; //+ center;
+                angle = (intervalAngle * i) + (weightAngle * j);
+                dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+                dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, dftScale);
+                }
+                
+                
+
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        }
+    }
+
+    private IEnumerator GrapeCircleThorn()
+	{
+        attackCount = 6;
+        intervalAngle = 360f / attackCount;
+		if (grapebool)
+		{
+            weightAngle = 5f;
+            grapebool = false;
+		}
+		else
+		{
+            weightAngle = -5f;
+            grapebool = true;
+        }
+        
+        anim.SetTrigger("Attack");
+        yield return null;
+
+    }
+
+    private IEnumerator grapeCircleThorn()
+    {
+        for (int j = 1; j < 9; j++)
+        {
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+                angle = (intervalAngle * i) + (weightAngle * j);
+                dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+                dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+                obj.transform.position = shoot.transform.position + ( dir.normalized * j);
+                StartCoroutine(ThornFire(obj.transform.position, dir));
+                if (obj.TryGetComponent<Warning>(out Warning warning))
+                {
+                    warning.SetType(PoolState.thorn,10f);
+                }
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.2f);
+        }
+    }
+    private GameObject obj1;
+    private IEnumerator ThornFire(Vector3 pos, Vector3 vec)
+	{
+        yield return YieldInstructionCache.WaitForSeconds(1.5f);
+        for(int n = 1; n < 3; n++)
+		{
+            obj1 = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+            obj1.transform.position = pos;
+            vec = Quaternion.AngleAxis(70, Vector3.forward) * vec;
+            if (obj1.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                projectile.MoveTo1(vec, 5f, dftScale);
+            }
+        }
+    }
+
+    private int Thorntype;
+    private IEnumerator GrapeThorn()
+	{
+        attackCount = 20;
+        intervalAngle = 360f / attackCount;
+        Thorntype = 1;
+        for (int i = 0; i < 3; i++)
+        {
+            anim.SetTrigger("Attack");
+            yield return YieldInstructionCache.WaitForSeconds(3f);
+        }
+    }
+    private void grapeThorn1()
+	{
+        for (int i = 0; i < attackCount+1; i++)
+		{
+            obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+            angle = intervalAngle * i;
+            dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+            dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+            if(i>0)
+                obj.transform.position = player.transform.position + (dir.normalized * 2.5f);
+            else
+                obj.transform.position = player.position;
+            if (obj.TryGetComponent<Warning>(out Warning warning))
+            {
+                warning.SetType(PoolState.thorn,2f);
+            }
+        }
+        Thorntype = 2;
+	}
+    private void grapeThorn2()
+    {
+        for (int i = 0; i < 10 + 1; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+            angle = intervalAngle * 2 * i;
+            dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+            dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+            obj.transform.position = player.transform.position + (dir.normalized * 1.5f);
+            if (obj.TryGetComponent<Warning>(out Warning warning))
+            {
+                warning.SetType(PoolState.thorn,2f);
+            }
+        }
+        for (int i = 0; i < attackCount; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+            angle = intervalAngle * i;
+            dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+            dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+            obj.transform.position = player.transform.position + (dir.normalized * 4f);
+            if (obj.TryGetComponent<Warning>(out Warning warning))
+            {
+                warning.SetType(PoolState.thorn,2f);
+            }
+        }
+        Thorntype = 3;
+    }
+    private void grapeThorn3()
+	{
+        for (int i = 0; i < attackCount; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+            angle = intervalAngle * i;
+            dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+            dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+            obj.transform.position = player.transform.position + (dir.normalized * 5f);
+            if (obj.TryGetComponent<Warning>(out Warning warning))
+            {
+                warning.SetType(PoolState.thorn,2f);
+            }
+        }
+        Thorntype = 1;
+    }
 
 
     #endregion

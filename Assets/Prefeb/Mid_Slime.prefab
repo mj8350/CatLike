@@ -24,7 +24,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3377591344350291950
 Transform:
   m_ObjectHideFlags: 0
@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f85dab43227b23e47a035dd9a0a51fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  die: 0
   PS: 10
 --- !u!70 &5997827466333707159
 CapsuleCollider2D:

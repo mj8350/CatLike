@@ -5,15 +5,16 @@ using UnityEngine;
 public class Warning : PoolLabel
 {
     private int type;
-
+    private float TT;
     private GameObject obj;
 
     public bool iceBorn = false;
 
 
-    public void SetType(PoolState poolState)
+    public void SetType(PoolState poolState,float time)
     {
         type = (int)poolState;
+        TT = time;
     }
     
     public void Spwan()
@@ -22,7 +23,7 @@ public class Warning : PoolLabel
         obj.transform.position = transform.position;
         if(obj.TryGetComponent<Thorn>(out Thorn thorn))
         {
-            thorn.ThornUp();
+            thorn.ThornUp(TT);
         }
         if(obj.TryGetComponent<Ice>(out Ice ice)&&iceBorn)
 		{

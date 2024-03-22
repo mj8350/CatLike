@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 6162955599791455139}
   - component: {fileID: 6162955599791455138}
   - component: {fileID: 6162955599791455167}
-  - component: {fileID: 6162955599791455164}
+  - component: {fileID: 2045783319346257761}
   - component: {fileID: 268230086135999865}
   - component: {fileID: 4403650514860048068}
+  - component: {fileID: 2704467978745532885}
   m_Layer: 7
   m_Name: Boss_Grape
   m_TagString: Untagged
@@ -129,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 0
---- !u!114 &6162955599791455164
+--- !u!114 &2045783319346257761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,15 +139,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6162955599791455141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ff1c585492b5b94ba5cb72de1bd7e00, type: 3}
+  m_Script: {fileID: 11500000, guid: 483b026b936f09940ab3880d67656d70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveS: 0.1
-  time: 0.1
-  type1: 0
+  moveS: 0.01
+  time: 0.01
+  type1: 14
   time1: 3
-  type2: 5
-  time2: 6
+  type2: 15
+  time2: 8
+  type3: 16
+  time3: 10
 --- !u!70 &268230086135999865
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -184,6 +187,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!95 &2704467978745532885
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6162955599791455141}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a83fc9818c227fd448e7e2b8a7fc735f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6162955600959838546
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,8 +276,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 1}
+  m_Offset: {x: 0, y: -0.1}
+  m_Size: {x: 1, y: 0.6}
   m_Direction: 1
 --- !u!114 &5203162191882514929
 MonoBehaviour:
