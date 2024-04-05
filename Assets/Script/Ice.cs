@@ -22,8 +22,7 @@ public class Ice : PoolLabel, IDamage
     {
         if (HP <= 0)
         {
-            //ReturnPool();
-            Destroy(gameObject);
+            ReturnPool();
             HP = 30f;
         }
     }

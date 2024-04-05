@@ -21,6 +21,7 @@ public enum AttackType
     GrapeCircleFire, //포도 전방향20개 3번
     GrapeCircleThorn, //원형 나선 가시
     GrapeThorn, // 플레이어 추적 가시
+    FrontWing03, //상어 보스 돌진
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -137,7 +138,10 @@ public class MonsterAttack : MonoBehaviour
                         grapeThorn3();
                         break;
                 }
-
+                break;
+            case AttackType.FrontWing03:
+                StartCoroutine("frontWing03");
+                StartCoroutine("spwanIce3");
                 break;
 
 
@@ -707,6 +711,57 @@ public class MonsterAttack : MonoBehaviour
         Thorntype = 1;
     }
 
+
+    #endregion
+
+    #region Boss_Shark
+    private IEnumerator FrontWing03()
+    {
+        attackRate = 0.1f;
+        attackCount = 2;
+        intervalAngle = 180f;
+        Mdir = (player.position - shoot.transform.position).normalized;
+        anim.SetTrigger("Attack");
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        movement.MoveRushOn(5f, Mdir);
+        dir = Quaternion.AngleAxis(-90, Vector3.forward) * Mdir;
+        yield return YieldInstructionCache.WaitForSeconds(2);
+
+        movement.MoveRushOff();
+    }
+    private IEnumerator frontWing03()
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            yield return YieldInstructionCache.WaitForSeconds(attackRate);
+
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position; //+ center;
+
+                dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, dftScale);
+                }
+            }
+        }
+    }
+    private IEnumerator spwanIce3()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            yield return YieldInstructionCache.WaitForSeconds(0.3f);
+            obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+            obj.transform.position = transform.position;
+            if (obj.TryGetComponent<Warning>(out Warning warning))
+            {
+                warning.SetType(PoolState.ice, 0f);
+                warning.iceBorn = true;
+            }
+        }
+    }
 
     #endregion
 }

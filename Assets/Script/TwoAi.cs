@@ -31,7 +31,7 @@ public class TwoAi : MonoBehaviour
     }
 	private void Start()
 	{
-        //StartCoroutine(TwoCreat(new Vector3(-3f, 0f, 0f)));
+        Creat();
     }
 
 	public void Creat()
