@@ -53,7 +53,7 @@ public class Player : MonoBehaviour, IDamage
         knife01 = true;
         knife02 = false;
         flag = false;
-        stamina_max = 100;
+        stamina_max = 10000;
         stamina_heal = 1;
         stamina = stamina_max;
         stamina_f = stamina;
@@ -159,17 +159,23 @@ public class Player : MonoBehaviour, IDamage
 
     }
 
-    private Vector3 hitSize = new Vector3(2.5f, 4f, 0f);
+    private Vector3 hitSize = new Vector3(2.5f, 4.5f, 0f);
     private Vector3 hitPos;
+    private Vector3 shootPos;
     private void Hit(float damage)
     {
-        hitPos = (MousePosition - transform.position).normalized;
+        shootPos = transform.position;
+        shootPos.y += 0.5f;
+        hitPos = shootPos + (MousePosition - shootPos).normalized;
         hitPos *= 1.5f;
 
         Collider2D[] hit = Physics2D.OverlapBoxAll(hitPos, hitSize,angle);
         foreach(Collider2D col in hit)
         {
-            //if(col.TryGetComponent<IDamage>(out IDamege idamage)) { }
+            if(col.TryGetComponent<IDamage>(out IDamage idamage)) 
+            {
+                idamage.TakeDamage(damage);
+            }
         }
     }
 
@@ -339,6 +345,7 @@ public class Player : MonoBehaviour, IDamage
 
     private IEnumerator Knife01()
     {
+        Hit(5);
         StartCoroutine(OnFlag(0.01f));
         yield return YieldInstructionCache.WaitForSeconds(0.15f);
         knife02 = true;
@@ -354,6 +361,7 @@ public class Player : MonoBehaviour, IDamage
 
     private IEnumerator Knife02()
     {
+        Hit(5);
         StartCoroutine(OnFlag(0.02f));
         yield return YieldInstructionCache.WaitForSeconds(0.4f);
         anim.SetBool("KnifeAttack01", false);
@@ -375,6 +383,6 @@ public class Player : MonoBehaviour, IDamage
 
     public void TakeDamage(float damage)
     {
-        Debug.Log($"{damage}만큼의 데미지를 입음");
+        //Debug.Log($"{damage}만큼의 데미지를 입음");
     }
 }

@@ -578,9 +578,10 @@ public class MonsterAttack : MonoBehaviour
             yield return YieldInstructionCache.WaitForSeconds(0.3f);
         }
     }
-
+    private bool oneThorn;
     private IEnumerator GrapeCircleThorn()
 	{
+        oneThorn = true;
         attackCount = 6;
         intervalAngle = 360f / attackCount;
 		if (grapebool)
@@ -613,9 +614,13 @@ public class MonsterAttack : MonoBehaviour
                 StartCoroutine(ThornFire(obj.transform.position, dir));
                 if (obj.TryGetComponent<Warning>(out Warning warning))
                 {
-                    warning.SetType(PoolState.thorn,10f);
+                    if (oneThorn)
+                        warning.SetType(PoolState.thorn, 2f);
+                    else
+                        warning.SetType(PoolState.thorn,10f);
                 }
             }
+            oneThorn = false;
             yield return YieldInstructionCache.WaitForSeconds(0.2f);
         }
     }

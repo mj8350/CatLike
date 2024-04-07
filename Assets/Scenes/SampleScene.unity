@@ -978,7 +978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObj: {fileID: 5024897912295600955, guid: f3489cef9e8f27d42b6ce9bb94326fcb, type: 3}
-  allocateCount: 15
+  allocateCount: 50
 --- !u!4 &889120458
 Transform:
   m_ObjectHideFlags: 0
@@ -2049,7 +2049,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 0
   m_Sprite: {fileID: -6390190949350928050, guid: f9e49d2dcb124c54f8c2120da07cf81d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
