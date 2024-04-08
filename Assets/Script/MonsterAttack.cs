@@ -22,6 +22,7 @@ public enum AttackType
     GrapeCircleThorn, //원형 나선 가시
     GrapeThorn, // 플레이어 추적 가시
     FrontWing03, //상어 보스 돌진
+    Sniping02, //곰 보스 시간차 저격
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -142,6 +143,9 @@ public class MonsterAttack : MonoBehaviour
             case AttackType.FrontWing03:
                 StartCoroutine("frontWing03");
                 StartCoroutine("spwanIce3");
+                break;
+            case AttackType.Sniping02:
+                StartCoroutine("sniping3");
                 break;
 
 
@@ -290,7 +294,8 @@ public class MonsterAttack : MonoBehaviour
     {
         obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
         obj.transform.position = player.position;
-        if(obj.TryGetComponent<Warning>(out Warning warning)){
+        if (obj.TryGetComponent<Warning>(out Warning warning))
+        {
             warning.SetType(PoolState.thorn, 3f);
         }
     }
@@ -349,7 +354,7 @@ public class MonsterAttack : MonoBehaviour
         movement.MoveRushOn(3f, Mdir);
         dir = Quaternion.AngleAxis(-90, Vector3.forward) * Mdir;
         yield return YieldInstructionCache.WaitForSeconds(2);
-        
+
         movement.MoveRushOff();
     }
     private IEnumerator frontWing01()
@@ -396,7 +401,7 @@ public class MonsterAttack : MonoBehaviour
     }
     private IEnumerator fire5()
     {
-        for(int i = 0; i < attackCount; i++)
+        for (int i = 0; i < attackCount; i++)
         {
             yield return YieldInstructionCache.WaitForSeconds(attackRate);
 
@@ -406,7 +411,7 @@ public class MonsterAttack : MonoBehaviour
             {
                 projectile.MoveTo1(Mdir, 20f, dftScale);
             }
-            
+
         }
     }
 
@@ -415,7 +420,7 @@ public class MonsterAttack : MonoBehaviour
 
     #region Pudding
     private IEnumerator Bogle01()
-	{
+    {
         attackCount = 16;
         intervalAngle = 20f;
 
@@ -464,11 +469,11 @@ public class MonsterAttack : MonoBehaviour
             }
         }
     }
-	#endregion
+    #endregion
 
-	#region Shark
+    #region Shark
     private IEnumerator FrontWing02()
-	{
+    {
         attackRate = 0.1f;
         attackCount = 2;
         intervalAngle = 180f;
@@ -502,25 +507,25 @@ public class MonsterAttack : MonoBehaviour
     }
 
     private IEnumerator spwanIce()
-	{
+    {
         for (int i = 0; i < 4; i++)
-		{
+        {
             yield return YieldInstructionCache.WaitForSeconds(0.3f);
             obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
             obj.transform.position = transform.position;
             if (obj.TryGetComponent<Warning>(out Warning warning))
             {
-                warning.SetType(PoolState.ice,0f);
+                warning.SetType(PoolState.ice, 0f);
                 //warning.iceBorn = true;
             }
         }
-	}
+    }
 
-	#endregion
+    #endregion
 
-	#region Boss_Slime
+    #region Boss_Slime
     private IEnumerator SlimeBubble()
-	{
+    {
         attackCount = 8;
         intervalAngle = 360f / attackCount;
         anim.SetTrigger("Attack");
@@ -549,7 +554,7 @@ public class MonsterAttack : MonoBehaviour
 
     #region Boss_Greap
     private IEnumerator GrapeCircleFire()
-	{
+    {
         attackCount = 20;
         intervalAngle = 360f / attackCount;
         weightAngle = intervalAngle / 2;
@@ -571,8 +576,8 @@ public class MonsterAttack : MonoBehaviour
                 {
                     projectile.MoveTo1(dir, 5f, dftScale);
                 }
-                
-                
+
+
 
             }
             yield return YieldInstructionCache.WaitForSeconds(0.3f);
@@ -580,21 +585,21 @@ public class MonsterAttack : MonoBehaviour
     }
     private bool oneThorn;
     private IEnumerator GrapeCircleThorn()
-	{
+    {
         oneThorn = true;
         attackCount = 6;
         intervalAngle = 360f / attackCount;
-		if (grapebool)
-		{
+        if (grapebool)
+        {
             weightAngle = 5f;
             grapebool = false;
-		}
-		else
-		{
+        }
+        else
+        {
             weightAngle = -5f;
             grapebool = true;
         }
-        
+
         anim.SetTrigger("Attack");
         yield return null;
 
@@ -610,14 +615,14 @@ public class MonsterAttack : MonoBehaviour
                 angle = (intervalAngle * i) + (weightAngle * j);
                 dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
                 dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
-                obj.transform.position = shoot.transform.position + ( dir.normalized * j);
+                obj.transform.position = shoot.transform.position + (dir.normalized * j);
                 StartCoroutine(ThornFire(obj.transform.position, dir));
                 if (obj.TryGetComponent<Warning>(out Warning warning))
                 {
                     if (oneThorn)
                         warning.SetType(PoolState.thorn, 2f);
                     else
-                        warning.SetType(PoolState.thorn,10f);
+                        warning.SetType(PoolState.thorn, 10f);
                 }
             }
             oneThorn = false;
@@ -626,10 +631,10 @@ public class MonsterAttack : MonoBehaviour
     }
     private GameObject obj1;
     private IEnumerator ThornFire(Vector3 pos, Vector3 vec)
-	{
+    {
         yield return YieldInstructionCache.WaitForSeconds(1.5f);
-        for(int n = 1; n < 3; n++)
-		{
+        for (int n = 1; n < 3; n++)
+        {
             obj1 = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
             obj1.transform.position = pos;
             vec = Quaternion.AngleAxis(70, Vector3.forward) * vec;
@@ -642,7 +647,7 @@ public class MonsterAttack : MonoBehaviour
 
     private int Thorntype;
     private IEnumerator GrapeThorn()
-	{
+    {
         attackCount = 20;
         intervalAngle = 360f / attackCount;
         Thorntype = 1;
@@ -653,24 +658,24 @@ public class MonsterAttack : MonoBehaviour
         }
     }
     private void grapeThorn1()
-	{
-        for (int i = 0; i < attackCount+1; i++)
-		{
+    {
+        for (int i = 0; i < attackCount + 1; i++)
+        {
             obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
             angle = intervalAngle * i;
             dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
             dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
-            if(i>0)
+            if (i > 0)
                 obj.transform.position = player.transform.position + (dir.normalized * 2.5f);
             else
                 obj.transform.position = player.position;
             if (obj.TryGetComponent<Warning>(out Warning warning))
             {
-                warning.SetType(PoolState.thorn,2f);
+                warning.SetType(PoolState.thorn, 2f);
             }
         }
         Thorntype = 2;
-	}
+    }
     private void grapeThorn2()
     {
         for (int i = 0; i < 10 + 1; i++)
@@ -682,7 +687,7 @@ public class MonsterAttack : MonoBehaviour
             obj.transform.position = player.transform.position + (dir.normalized * 1.5f);
             if (obj.TryGetComponent<Warning>(out Warning warning))
             {
-                warning.SetType(PoolState.thorn,2f);
+                warning.SetType(PoolState.thorn, 2f);
             }
         }
         for (int i = 0; i < attackCount; i++)
@@ -694,13 +699,13 @@ public class MonsterAttack : MonoBehaviour
             obj.transform.position = player.transform.position + (dir.normalized * 4f);
             if (obj.TryGetComponent<Warning>(out Warning warning))
             {
-                warning.SetType(PoolState.thorn,2f);
+                warning.SetType(PoolState.thorn, 2f);
             }
         }
         Thorntype = 3;
     }
     private void grapeThorn3()
-	{
+    {
         for (int i = 0; i < attackCount; i++)
         {
             obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
@@ -710,7 +715,7 @@ public class MonsterAttack : MonoBehaviour
             obj.transform.position = player.transform.position + (dir.normalized * 5f);
             if (obj.TryGetComponent<Warning>(out Warning warning))
             {
-                warning.SetType(PoolState.thorn,2f);
+                warning.SetType(PoolState.thorn, 2f);
             }
         }
         Thorntype = 1;
@@ -768,5 +773,22 @@ public class MonsterAttack : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Boss_Bear
+    private IEnumerator Sniping02()
+    {
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+
+    private IEnumerator sniping3()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            sniping();
+            yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        }
+    }
     #endregion
 }

@@ -15,7 +15,7 @@ public class TwoAi : MonoBehaviour
     private MonsterMove movement;
     private MonsterAttack attack;
 
-    private int ran;
+    public int ran = 0;
 
     [SerializeField]
     private float moveS;

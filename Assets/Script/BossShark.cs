@@ -15,29 +15,29 @@ public class BossShark : MonoBehaviour
             Debug.Log("BossShark.cs - Awake() - monster 참조 오류");
         player = GameObject.Find("Player").transform;
         die = true;
+        StartCoroutine("spwanIce");
     }
 
     private void Update()
     {
-        if(monster.HP <= 0)
+        if (monster.HP <= 0)
             die = false;
     }
 
-    private IEnumerator spwanIce3()
+    private IEnumerator spwanIce()
     {
+        yield return YieldInstructionCache.WaitForSeconds(3f);
         while (die)
         {
-            for (int i = 0; i < 4; i++)
+            obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+            obj.transform.position = player.position;
+            if (obj.TryGetComponent<Warning>(out Warning warning))
             {
-                yield return YieldInstructionCache.WaitForSeconds(3f);
-                obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
-                obj.transform.position = player.position;
-                if (obj.TryGetComponent<Warning>(out Warning warning))
-                {
-                    warning.SetType(PoolState.ice, 0f);
-                    warning.iceBorn = true;
-                }
+                warning.SetType(PoolState.ice, 0f);
+                warning.iceBorn = true;
             }
+
+            yield return YieldInstructionCache.WaitForSeconds(3f);
         }
     }
 }
