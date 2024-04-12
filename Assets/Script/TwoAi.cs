@@ -5,8 +5,7 @@ using UnityEngine;
 public enum TwoState
 {
     ToMove = 0,
-    Attack1,
-    Attack2,
+    Attack,
 }
 
 public class TwoAi : MonoBehaviour
@@ -20,7 +19,7 @@ public class TwoAi : MonoBehaviour
     [SerializeField]
     private float moveS;
     [SerializeField]
-    private float time;
+    private float timeS;
 
     private void Awake()
     {
@@ -54,46 +53,24 @@ public class TwoAi : MonoBehaviour
     private IEnumerator ToMove()
     {
         movement.moveSpeed = moveS;
-        yield return YieldInstructionCache.WaitForSeconds(time);
+        yield return YieldInstructionCache.WaitForSeconds(timeS);
         movement.moveSpeed = 0f;
-        //ChangeState(SlimeState.Attack2);
-        Rand();
+        ChangeState(TwoState.Attack);
+        //Rand();
     }
     
+    
     [SerializeField]
-    private AttackType type1;//어떤 행동
+    private AttackType[] type;
     [SerializeField]
-    private float time1;//몇 초 이후 다음 행동
-    [SerializeField]
-    private AttackType type2;
-    [SerializeField]
-    private float time2;
+    private float[] time;
 
-    private IEnumerator Attack1()
+    private IEnumerator Attack()
     {
-        attack.AttackActive(type1);
-        yield return YieldInstructionCache.WaitForSeconds(time1);
+        ran = Random.Range(0, type.Length);
+        attack.AttackActive(type[ran]);
+        yield return YieldInstructionCache.WaitForSeconds(time[ran]);
         ChangeState(TwoState.ToMove);
     }
 
-    private IEnumerator Attack2()
-    {
-        attack.AttackActive(type2);
-        yield return YieldInstructionCache.WaitForSeconds(time2);
-        ChangeState(TwoState.ToMove);
-    }
-
-    private void Rand()
-    {
-        ran = Random.Range(1, 3);
-        switch (ran)
-        {
-            case 1:
-                ChangeState(TwoState.Attack1);
-                break;
-            case 2:
-                ChangeState(TwoState.Attack2);
-                break;
-        }
-    }
 }

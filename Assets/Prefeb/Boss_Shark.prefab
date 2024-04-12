@@ -251,12 +251,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff1c585492b5b94ba5cb72de1bd7e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ran: 0
   moveS: 2
-  time: 3
-  type1: 17
-  time1: 3
-  type2: 17
-  time2: 3
+  timeS: 3
+  type: 11000000
+  time:
+  - 3
 --- !u!114 &2070046243876251799
 MonoBehaviour:
   m_ObjectHideFlags: 0

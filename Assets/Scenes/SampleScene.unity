@@ -506,6 +506,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -588,6 +589,18 @@ Transform:
   - {fileID: 667663614}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c2d8657ce17f9b459ccb0a7d94aa253, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &539928175
 GameObject:
   m_ObjectHideFlags: 0
@@ -2170,6 +2183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss_Bear
       objectReference: {fileID: 0}
+    - target: {fileID: 293875522515322386, guid: e2f735aaf9801c4449ef0fcda5321a84, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2792572732632864396, guid: e2f735aaf9801c4449ef0fcda5321a84, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.9883268
@@ -2285,10 +2302,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6162955599791455137, guid: caf7e360695804442a81b4ab1edfb702, type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6162955599791455137, guid: caf7e360695804442a81b4ab1edfb702, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2341,71 +2354,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caf7e360695804442a81b4ab1edfb702, type: 3}
---- !u!1001 &7680397528308099261
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.06
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567068, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567076, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_Name
-      value: Bear_SP
-      objectReference: {fileID: 0}
-    - target: {fileID: 7680397528901567076, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8d3b0d56241d32840838decc37b70224, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2413,7 +2361,6 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 2140931644}
   - {fileID: 292781376}
-  - {fileID: 7680397528308099261}
   - {fileID: 1319118409}
   - {fileID: 1102048394}
   - {fileID: 7161970579342490048}

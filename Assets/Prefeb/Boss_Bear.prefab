@@ -35,7 +35,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.8216, y: -1.2839, z: 0.1}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 398799309855621434}
@@ -133,11 +133,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ran: 0
   moveS: 1
-  time: 1
-  type1: 8
-  time1: 4
-  type2: 7
-  time2: 3
+  timeS: 1
+  type: 1200000007000000
+  time:
+  - 4
+  - 3
 --- !u!95 &7599045364623905021
 Animator:
   serializedVersion: 5

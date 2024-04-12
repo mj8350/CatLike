@@ -130,12 +130,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff1c585492b5b94ba5cb72de1bd7e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ran: 0
   moveS: 2
-  time: 1
-  type1: 0
-  time1: 3
-  type2: 1
-  time2: 3
+  timeS: 1
+  type: 0000000001000000
+  time:
+  - 3
+  - 3
 --- !u!114 &1918784452194844731
 MonoBehaviour:
   m_ObjectHideFlags: 0
