@@ -63,9 +63,6 @@ public class MonsterMove : MonoBehaviour
         else
             sr.flipX = false;
 
-        if (Input.GetKeyDown(KeyCode.G))
-            StartCoroutine("ToMove");
-
     }
 
     

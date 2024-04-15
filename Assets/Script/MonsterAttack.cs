@@ -23,6 +23,10 @@ public enum AttackType
     GrapeThorn, // 플레이어 추적 가시
     FrontWing03, //상어 보스 돌진
     Sniping02, //곰 보스 시간차 저격
+    ThreeFire02, //젤리 플레이어방향 3개씩 30개발사
+    JellyBubble, //젤리 120도 버블 발사
+    JellyCircleFire, //전방향 8발사
+    JellyPhase2Bubble, //젤리 2페이즈 양옆에서 버블
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -44,8 +48,11 @@ public class MonsterAttack : MonoBehaviour
     private Vector3 dir = Vector3.zero;
     private Vector3 Mdir;
 
-    private bool grapebool;
+    //private int count;
+    //private bool countbool;
 
+    private bool grapebool;
+    private bool jellybool;
     //private Vector3 center = new Vector3(0f, 0.5f, 0f);
 
     private Vector3 dftScale = new Vector3(0.6f, 0.6f, 0.6f);
@@ -63,6 +70,7 @@ public class MonsterAttack : MonoBehaviour
 
         player = GameObject.Find("Player").transform;
         grapebool = true;
+        jellybool = true;
     }
 
     public void AttackActive(AttackType newAttack)
@@ -147,7 +155,26 @@ public class MonsterAttack : MonoBehaviour
             case AttackType.Sniping02:
                 StartCoroutine("sniping3");
                 break;
-
+            case AttackType.ThreeFire02:
+                StartCoroutine("Three02");
+                break;
+            case AttackType.JellyBubble:
+                if (jellybool)
+                    StartCoroutine("jellyBubble01");
+                else
+                    StartCoroutine("jellyBubble02");
+                StartCoroutine("jellyFire");
+                break;
+            case AttackType.JellyCircleFire:
+                StartCoroutine("jellyCircle");
+                StartCoroutine("jellyThorn");
+                break;
+            case AttackType.JellyPhase2Bubble:
+                StartCoroutine("jellyBubble01");
+                StartCoroutine("jellyBubble02");
+                StartCoroutine("jellyFire");
+                StartCoroutine("jellyThorn");
+                break;
 
         }
     }
@@ -792,5 +819,178 @@ public class MonsterAttack : MonoBehaviour
     }
     #endregion
 
+    #region Jelly
+    private IEnumerator ThreeFire02()
+    {
+        attackCount = 3;
+        intervalAngle = 20f;
+        weightAngle = 1f;
+
+        Mdir = (player.position - shoot.transform.position).normalized;
+
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+    private IEnumerator Three02()
+    {
+        int count = 0;
+        bool countbool = true;
+        for (int j = 0; j < 30; j++)
+        {
+            if (countbool)
+                Mdir = Quaternion.AngleAxis(-weightAngle * (j/10), Vector3.forward) * Mdir;
+            else
+                Mdir = Quaternion.AngleAxis(weightAngle * (j/10), Vector3.forward) * Mdir;
+
+            dir = Quaternion.AngleAxis(-intervalAngle * 2f, Vector3.forward) * Mdir;
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position; //+ center;
+
+                dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, midScale);
+                }
+            }
+            count++;
+            if(count%5 == 0)
+            {
+                if (countbool)
+                    countbool = false;
+                else
+                    countbool = true;
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.2f);
+        }
+    }
+    private IEnumerator JellyBubble()
+    {
+        attackCount = 20;
+        anim.SetTrigger("Attack");
+        yield return null;
+        if (jellybool)
+            jellybool = false;
+        else
+            jellybool = true;
+    }
+    private IEnumerator jellyBubble01()
+    {
+        Vector3 dir = Vector3.down;
+        dir = Quaternion.AngleAxis(+60, Vector3.forward) * dir;
+        int intervalAngle = -6;
+        for (int i = 0; i < attackCount; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.bubble].Pop();
+            obj.transform.position = shoot.transform.position;
+            dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
+            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                projectile.MoveTo1(dir, 2.5f, dftScale);
+                //projectile.BubblePop();
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.2f);
+        }
+    }
+    private IEnumerator jellyBubble02()
+    {
+        Vector3 dir = Vector3.down;
+        dir = Quaternion.AngleAxis(-60, Vector3.forward) * dir;
+        int intervalAngle = 6;
+        for (int i = 0; i < attackCount; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.bubble].Pop();
+            obj.transform.position = shoot.transform.position;
+            dir = Quaternion.AngleAxis(+intervalAngle, Vector3.forward) * dir;
+            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                projectile.MoveTo1(dir, 2.5f, dftScale);
+                //projectile.BubblePop();
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.2f);
+        }
+        
+    }
+
+    private IEnumerator jellyFire()
+    {
+        yield return YieldInstructionCache.WaitForSeconds(2f);
+
+        for (int i = 0; i < attackCount; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+            obj.transform.position = shoot.transform.position;
+            //dir = player.position;
+            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                projectile.MoveTo2(5f, dftScale);
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.2f);
+        }
+    }
+    private IEnumerator JellyCircleFire()
+    {
+        attackCount = 8;
+        intervalAngle = 360f / attackCount;
+        
+        if (jellybool)
+        {
+            weightAngle = 3;
+            jellybool = false;
+        }
+        else
+        {
+            weightAngle = -3;
+            jellybool = true;
+        }
+            
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+    private IEnumerator jellyCircle()
+    {
+        for (int j = 0; j < 30; j++)
+        {
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position;
+                angle = (intervalAngle * i) + (weightAngle * j);
+                dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+                dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, midScale);
+                }
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.1f);
+        }
+    }
+
+    private IEnumerator jellyThorn()
+    {
+        yield return YieldInstructionCache.WaitForSeconds(1f);
+        for (int i = 0; i < 5; i++)
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+            obj.transform.position = player.position;
+            if (obj.TryGetComponent<Warning>(out Warning warning))
+            {
+                warning.SetType(PoolState.thorn, 2f);
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.5f);
+        }
+    }
+
+    private IEnumerator JellyPhase2Bubble()
+    {
+        attackCount = 20;
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+
+
+    #endregion
 
 }

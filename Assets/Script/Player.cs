@@ -279,6 +279,8 @@ public class Player : MonoBehaviour, IDamage
                 bowPos.y += 0.5f;
                 obj.transform.position = bowPos;
                 obj.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+                if (obj.TryGetComponent<Arrow>(out Arrow arrow))
+                    arrow.del();
                 yield return YieldInstructionCache.WaitForSeconds(0.5f);
             }
             else

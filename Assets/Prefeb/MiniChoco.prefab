@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2950938579952908313}
   - component: {fileID: 475886938493170417}
   - component: {fileID: 315155638970224256}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: ShootPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 6214258044501135347}
   - component: {fileID: 3513550444396701191}
   - component: {fileID: 1813140824253668512}
+  - component: {fileID: 3971153554284970093}
   m_Layer: 7
   m_Name: MiniChoco
   m_TagString: Untagged
@@ -265,3 +266,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
+--- !u!114 &3971153554284970093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7617765032228152722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc650585c3acfa449c20cb23d479e78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHP: 10
+  HP: 0
+  phase: 0

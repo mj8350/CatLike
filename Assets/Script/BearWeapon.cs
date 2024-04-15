@@ -28,13 +28,9 @@ public class BearWeapon : MonoBehaviour
     {
         if(ai.ran == 0)
         {
-            sr.sprite = null;
-        }
-        if(ai.ran == 1)
-        {
             sr.sprite = cb;
         }
-        if(ai.ran == 2)
+        if(ai.ran == 1)
         {
             sr.sprite = sp;
         }

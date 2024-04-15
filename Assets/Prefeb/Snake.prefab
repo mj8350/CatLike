@@ -276,7 +276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc650585c3acfa449c20cb23d479e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHP: 10
   HP: 0
+  phase: 0
 --- !u!70 &6051549688037139736
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

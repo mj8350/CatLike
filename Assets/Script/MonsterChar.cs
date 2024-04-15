@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class MonsterChar : PoolLabel
 {
+	[SerializeField]
+	private float MaxHP;
+
     public float HP;
+
+	public int phase = 0;
 
 	private void Awake()
 	{
-		HP = 30f;
+		HP = MaxHP;
 	}
 
 	private void Update()
@@ -20,17 +25,20 @@ public class MonsterChar : PoolLabel
 			
 		}
 	}
-	private void FixedUpdate()
-	{
-		
-	}
 
 	private IEnumerator Die()
 	{
 		yield return YieldInstructionCache.WaitForSeconds(0.1f);
 		ReturnPool();
-		HP = 30f;
+		HP = MaxHP;
 	}
+
+	public void ChangePhase(int PH,int ps)
+    {
+		if (HP <= MaxHP / 100 * PH)
+			phase=ps;
+		
+    }
 
 
 }

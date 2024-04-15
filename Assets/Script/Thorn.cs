@@ -16,4 +16,12 @@ public class Thorn : PoolLabel
         yield return YieldInstructionCache.WaitForSeconds(TT);
         ReturnPool();
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.TryGetComponent<IDamage>(out IDamage damage))
+        {
+            damage.TakeDamage(5f);
+        }
+    }
 }
