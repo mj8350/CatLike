@@ -1144,6 +1144,7 @@ GameObject:
   - component: {fileID: 1102048392}
   - component: {fileID: 1102048391}
   - component: {fileID: 1102048395}
+  - component: {fileID: 1102048397}
   m_Layer: 7
   m_Name: Zigu
   m_TagString: Untagged
@@ -1271,6 +1272,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d65bcfcb39d11c4c9d776dd3f053d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeS: 1
+  type: 
+  time: []
+  type1: 
+  time1: []
+  type2: 0
+--- !u!95 &1102048397
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102048390}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8653f33d7cc7acc4d80aeb5f82ab556a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1109956951
 GameObject:
   m_ObjectHideFlags: 0
