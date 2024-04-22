@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum ZiguState
 {
-    ToMove = 0,
+    Stand = 0,
     Attack,
     Attack1,
     Attack2,
@@ -41,7 +41,7 @@ public class ZiguAi : MonoBehaviour
     public IEnumerator ZiguCreat()
     {
         yield return YieldInstructionCache.WaitForSeconds(1f);
-        ChangeState(ZiguState.ToMove);
+        ChangeState(ZiguState.Stand);
     }
 
     public void ChangeState(ZiguState newState)
@@ -50,7 +50,7 @@ public class ZiguAi : MonoBehaviour
         State = newState;
         StartCoroutine(State.ToString());
     }
-    private IEnumerator ToMove()
+    private IEnumerator Stand()
     {
         movement.moveSpeed = 3f;
         yield return YieldInstructionCache.WaitForSeconds(timeS);
@@ -96,7 +96,7 @@ public class ZiguAi : MonoBehaviour
         ran = Random.Range(0, type.Length);
         attack.AttackActive(type[ran]);
         yield return YieldInstructionCache.WaitForSeconds(time[ran]);
-        ChangeState(ZiguState.ToMove);
+        ChangeState(ZiguState.Stand);
     }
 
     private IEnumerator Attack1()
@@ -104,7 +104,7 @@ public class ZiguAi : MonoBehaviour
         ran = Random.Range(0, type.Length);
         attack.AttackActive(type1[ran]);
         yield return YieldInstructionCache.WaitForSeconds(time1[ran]);
-        ChangeState(ZiguState.ToMove);
+        ChangeState(ZiguState.Stand);
     }
 
     private IEnumerator Attack2()
