@@ -19,9 +19,14 @@ public class Thorn : PoolLabel
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<IDamage>(out IDamage damage))
+        if (collision.TryGetComponent<Player>(out Player player) && player.miss)
         {
-            damage.TakeDamage(5f);
+            if (collision.TryGetComponent<IDamage>(out IDamage damage))
+            {
+                damage.TakeDamage(5f);
+            }
         }
+            
+        
     }
 }

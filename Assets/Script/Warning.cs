@@ -9,6 +9,7 @@ public class Warning : PoolLabel
     private GameObject obj;
 
     public bool iceBorn = false;
+    public bool zigu = false;
 
 
     public void SetType(PoolState poolState,float time)
@@ -19,18 +20,47 @@ public class Warning : PoolLabel
     
     public void Spwan()
     {
-        obj = PoolManager.Inst.pools[type].Pop();
-        obj.transform.position = transform.position;
-        if(obj.TryGetComponent<Thorn>(out Thorn thorn))
+        if (!zigu)
         {
-            thorn.ThornUp(TT);
+            obj = PoolManager.Inst.pools[type].Pop();
+            obj.transform.position = transform.position;
+            if (obj.TryGetComponent<Thorn>(out Thorn thorn))
+            {
+                thorn.ThornUp(TT);
+            }
+            if (obj.TryGetComponent<Ice>(out Ice ice) && iceBorn)
+            {
+                ice.IcePop();
+            }
+            iceBorn = false;
         }
-        if(obj.TryGetComponent<Ice>(out Ice ice)&&iceBorn)
-		{
-            ice.IcePop();
-		}
-        iceBorn = false;
+        else
+        {
+            Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, 3.5f);
+            foreach (Collider2D col in hit)
+            {
+                if (col.CompareTag("Player"))
+                {
+                    if (col.TryGetComponent<Player>(out Player player) && player.miss)
+                    {
+                        if (col.TryGetComponent<IDamage>(out IDamage damage))
+                        {
+                            damage.TakeDamage(5f);
+                        }
+                    }
+                }
+            }
+            transform.localScale = new Vector3(1.5f, 1f, 1f);
+            zigu = false;
+        }
         ReturnPool();
     }
+    
+    public void ziguScale()
+    {
+        transform.localScale = new Vector3(7f, 7f, 7f);
+    }
+        
+    
     
 }

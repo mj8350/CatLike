@@ -60,9 +60,12 @@ public class Ice : PoolLabel, IDamage
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent<IDamage>(out IDamage damage))
+        if (collision.gameObject.TryGetComponent<Player>(out Player player) && player.miss)
         {
-            damage.TakeDamage(5f);
+            if (collision.gameObject.TryGetComponent<IDamage>(out IDamage damage))
+            {
+                damage.TakeDamage(5f);
+            }
         }
     }
 }

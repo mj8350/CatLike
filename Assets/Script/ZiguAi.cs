@@ -16,6 +16,7 @@ public class ZiguAi : MonoBehaviour
     private MonsterChar mstChar;
 
     private int ran = 0;
+    private int count =0;
 
     [SerializeField]
     private float timeS;
@@ -73,7 +74,7 @@ public class ZiguAi : MonoBehaviour
         }
 
 
-        //Rand();
+        
     }
 
     [SerializeField]
@@ -93,18 +94,24 @@ public class ZiguAi : MonoBehaviour
 
     private IEnumerator Attack()
     {
-        ran = Random.Range(0, type.Length);
-        attack.AttackActive(type[ran]);
-        yield return YieldInstructionCache.WaitForSeconds(time[ran]);
+        attack.AttackActive(type[count]);
+        yield return YieldInstructionCache.WaitForSeconds(time[count]);
         ChangeState(ZiguState.Stand);
+        if (count < 3)
+            count++;
+        else
+            count = 0;
     }
 
     private IEnumerator Attack1()
     {
-        ran = Random.Range(0, type.Length);
-        attack.AttackActive(type1[ran]);
-        yield return YieldInstructionCache.WaitForSeconds(time1[ran]);
+        attack.AttackActive(type1[count]);
+        yield return YieldInstructionCache.WaitForSeconds(time1[count]);
         ChangeState(ZiguState.Stand);
+        if (count < 3)
+            count++;
+        else
+            count = 0;
     }
 
     private IEnumerator Attack2()

@@ -1273,11 +1273,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeS: 1
-  type: 
-  time: []
-  type1: 
-  time1: []
-  type2: 0
+  type: 1700000018000000120000001c000000
+  time:
+  - 1
+  - 2
+  - 3
+  - 8
+  type1: 1900000019000000120000001c000000
+  time1:
+  - 2
+  - 2
+  - 2
+  - 8
+  type2: 30
 --- !u!95 &1102048397
 Animator:
   serializedVersion: 5
@@ -1959,7 +1967,7 @@ GameObject:
   - component: {fileID: 2140931645}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2210,6 +2218,10 @@ PrefabInstance:
     - target: {fileID: 293875522515322386, guid: e2f735aaf9801c4449ef0fcda5321a84, type: 3}
       propertyPath: m_Name
       value: Boss_Bear
+      objectReference: {fileID: 0}
+    - target: {fileID: 293875522515322386, guid: e2f735aaf9801c4449ef0fcda5321a84, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2792572732632864396, guid: e2f735aaf9801c4449ef0fcda5321a84, type: 3}
       propertyPath: m_LocalPosition.x

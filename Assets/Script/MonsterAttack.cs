@@ -27,6 +27,14 @@ public enum AttackType
     JellyBubble, //젤리 120도 버블 발사
     JellyCircleFire, //전방향 8발사
     JellyPhase2Bubble, //젤리 2페이즈 양옆에서 버블
+    Zigu01,
+    Zigu02,
+    Zigu03,
+    Zigu04,
+    Zigu05,
+    ZiguCircle01,
+    ZiguCircle02,
+    ZiguCircle03,
 }
 
 public class MonsterAttack : MonoBehaviour
@@ -53,6 +61,7 @@ public class MonsterAttack : MonoBehaviour
 
     private bool grapebool;
     private bool jellybool;
+    private bool zigubool1;
     //private Vector3 center = new Vector3(0f, 0.5f, 0f);
 
     private Vector3 dftScale = new Vector3(0.6f, 0.6f, 0.6f);
@@ -175,7 +184,29 @@ public class MonsterAttack : MonoBehaviour
                 StartCoroutine("jellyFire");
                 StartCoroutine("jellyThorn");
                 break;
-
+            case AttackType.Zigu01:
+                StartCoroutine("zigu01");
+                break;
+            case AttackType.Zigu02:
+                StartCoroutine("zigu02");
+                break;
+            case AttackType.Zigu03:
+                StartCoroutine("zigu03");
+                StartCoroutine("zigu3");
+                break;
+            case AttackType.Zigu04:
+                break;
+            case AttackType.Zigu05:
+                break;
+            case AttackType.ZiguCircle01:
+                StartCoroutine("ziguCircle01");
+                break;
+            case AttackType.ZiguCircle02:
+                StartCoroutine("ziguCircle01");
+                break;
+            case AttackType.ZiguCircle03:
+                StartCoroutine("ziguCircle01");
+                break;
         }
     }
 
@@ -192,7 +223,7 @@ public class MonsterAttack : MonoBehaviour
         for (int i = 0; i < attackCount; i++)
         {
             obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
-            obj.transform.position = shoot.transform.position; //+ center;
+            obj.transform.position = shoot.transform.position;
             angle = intervalAngle * i;
             dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
             dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
@@ -838,9 +869,9 @@ public class MonsterAttack : MonoBehaviour
         for (int j = 0; j < 30; j++)
         {
             if (countbool)
-                Mdir = Quaternion.AngleAxis(-weightAngle * (j/10), Vector3.forward) * Mdir;
+                Mdir = Quaternion.AngleAxis(-weightAngle * (j / 10), Vector3.forward) * Mdir;
             else
-                Mdir = Quaternion.AngleAxis(weightAngle * (j/10), Vector3.forward) * Mdir;
+                Mdir = Quaternion.AngleAxis(weightAngle * (j / 10), Vector3.forward) * Mdir;
 
             dir = Quaternion.AngleAxis(-intervalAngle * 2f, Vector3.forward) * Mdir;
             for (int i = 0; i < attackCount; i++)
@@ -855,7 +886,7 @@ public class MonsterAttack : MonoBehaviour
                 }
             }
             count++;
-            if(count%5 == 0)
+            if (count % 5 == 0)
             {
                 if (countbool)
                     countbool = false;
@@ -910,7 +941,7 @@ public class MonsterAttack : MonoBehaviour
             }
             yield return YieldInstructionCache.WaitForSeconds(0.2f);
         }
-        
+
     }
 
     private IEnumerator jellyFire()
@@ -933,7 +964,7 @@ public class MonsterAttack : MonoBehaviour
     {
         attackCount = 8;
         intervalAngle = 360f / attackCount;
-        
+
         if (jellybool)
         {
             weightAngle = 3;
@@ -944,7 +975,7 @@ public class MonsterAttack : MonoBehaviour
             weightAngle = -3;
             jellybool = true;
         }
-            
+
         anim.SetTrigger("Attack");
         yield return null;
     }
@@ -994,9 +1025,166 @@ public class MonsterAttack : MonoBehaviour
     #endregion
 
     #region Zigu
+    private IEnumerator Zigu01()
+    {
+        attackRate = 0.2f;
+        attackCount = 8;
+        intervalAngle = 30f;
+        zigubool1 = true;
+        anim.SetTrigger("Attack");
+        yield return null;
 
+    }
+    private IEnumerator zigu01()
+    {
+        for (int i = 0; i < attackCount; i++)
+        {
+            Mdir = (player.position - shoot.transform.position).normalized;
+            if (zigubool1)
+            {
+                Mdir = Quaternion.AngleAxis(-intervalAngle, Vector3.forward) * Mdir;
+                zigubool1 = false;
+            }
+            else
+            {
+                //Mdir = Quaternion.AngleAxis(intervalAngle, Vector3.forward) * Mdir;
+                zigubool1 = true;
+            }
+            for (int j = 0; j < 2; j++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position;
+                dir = Quaternion.AngleAxis(intervalAngle * j, Vector3.forward) * Mdir;
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, midScale);
+                }
+            }
+            yield return YieldInstructionCache.WaitForSeconds(attackRate);
+        }
+    }
+
+    private IEnumerator Zigu02()
+    {
+        transform.position = new Vector3(0, 100f, 0);
+        anim.SetTrigger("Attack");
+        yield return null;
+    }
+
+    private IEnumerator zigu02()
+    {
+        obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
+        obj.transform.position = player.position;
+        Vector3 pos = obj.transform.position;
+        if (obj.TryGetComponent<Warning>(out Warning warning))
+        {
+            warning.ziguScale();
+            warning.zigu = true;
+        }
+        yield return YieldInstructionCache.WaitForSeconds(1f);
+        transform.position = pos;
+    }
+
+    private IEnumerator ZiguCircle01()
+    {
+        attackCount = 2;
+        attackRate = 0.1f;
+        intervalAngle = 180f;
+        weightAngle = 16f;
+        transform.position = Vector3.zero;
+        yield return YieldInstructionCache.WaitForSeconds(1f);
+        anim.SetTrigger("Attack");
+    }
+
+    private IEnumerator ziguCircle01()
+    {
+        for (int j = 0; j < 60; j++)
+        {
+            for (int i = 0; i < attackCount; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position;
+                angle = (intervalAngle * i) + (weightAngle * j);
+                dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+                dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, dftScale);
+                }
+            }
+            yield return YieldInstructionCache.WaitForSeconds(attackRate);
+        }
+        for (int j = 0; j < 3; j++)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position;
+                angle = 45 * i;
+                dir.x = Mathf.Cos(angle * Mathf.Deg2Rad);
+                dir.y = Mathf.Sin(angle * Mathf.Deg2Rad);
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, dftScale);
+                }
+            }
+            yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        }
+    }
+    private IEnumerator Zigu03()
+    {
+        attackRate = 0.2f;
+        attackCount = 12;
+        intervalAngle = 30f;
+        zigubool1 = true;
+        anim.SetTrigger("Attack");
+        yield return null;
+
+    }
+    private IEnumerator zigu03()
+    {
+        for (int i = 0; i < attackCount; i++)
+        {
+            Mdir = (player.position - shoot.transform.position).normalized;
+            if (zigubool1)
+            {
+                Mdir = Quaternion.AngleAxis(-(intervalAngle * 2), Vector3.forward) * Mdir;
+                zigubool1 = false;
+            }
+            else
+            {
+                //Mdir = Quaternion.AngleAxis(intervalAngle, Vector3.forward) * Mdir;
+                zigubool1 = true;
+            }
+            for (int j = 0; j < 3; j++)
+            {
+                obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+                obj.transform.position = shoot.transform.position;
+                dir = Quaternion.AngleAxis(intervalAngle * j, Vector3.forward) * Mdir;
+                if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.MoveTo1(dir, 5f, midScale);
+                }
+            }
+            yield return YieldInstructionCache.WaitForSeconds(attackRate);
+        }
+    }
+    private IEnumerator zigu3()
+    {
+        for(int i = 0; i< 3; i++)
+        {
+            yield return YieldInstructionCache.WaitForSeconds(0.6f);
+            GameObject obj = PoolManager.Inst.pools[(int)PoolState.projectile].Pop();
+            obj.transform.position = shoot.transform.position;
+            if (obj.TryGetComponent<Projectile>(out Projectile projectile))
+            {
+                projectile.MoveTo2(5f, dftScale);
+            }
+        }
+    }
 
 
     #endregion
+
 
 }

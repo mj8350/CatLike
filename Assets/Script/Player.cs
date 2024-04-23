@@ -172,7 +172,7 @@ public class Player : MonoBehaviour, IDamage
         Collider2D[] hit = Physics2D.OverlapBoxAll(hitPos, hitSize,angle);
         foreach(Collider2D col in hit)
         {
-            if(col.TryGetComponent<IDamage>(out IDamage idamage)) 
+            if(col.TryGetComponent<IDamage>(out IDamage idamage)&&!col.CompareTag("Player")) 
             {
                 idamage.TakeDamage(damage);
             }
@@ -385,6 +385,6 @@ public class Player : MonoBehaviour, IDamage
 
     public void TakeDamage(float damage)
     {
-        //Debug.Log($"{damage}만큼의 데미지를 입음");
+        Debug.Log($"{damage}만큼의 데미지를 입음");
     }
 }
