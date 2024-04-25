@@ -11,6 +11,8 @@ public class MonsterChar : PoolLabel
 
 	public int phase = 0;
 
+	private GameObject obj;
+
 	private void Awake()
 	{
 		HP = MaxHP;
@@ -28,6 +30,9 @@ public class MonsterChar : PoolLabel
 
 	private IEnumerator Die()
 	{
+		obj = PoolManager.Inst.pools[(int)PoolState.smoke].Pop();
+		obj.transform.position = transform.GetChild(0).position;
+		obj.transform.localScale = transform.localScale / 2;
 		yield return YieldInstructionCache.WaitForSeconds(0.1f);
 		ReturnPool();
 		HP = MaxHP;

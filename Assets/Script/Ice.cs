@@ -15,7 +15,7 @@ public class Ice : PoolLabel, IDamage
 
     private void Awake()
     {
-        HP = 30f;
+        HP = 10f;
     }
 
     private void Update()
@@ -23,7 +23,7 @@ public class Ice : PoolLabel, IDamage
         if (HP <= 0)
         {
             ReturnPool();
-            HP = 30f;
+            HP = 10f;
         }
     }
 

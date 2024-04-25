@@ -25,6 +25,12 @@ public enum PoolState
     shark,
     slime_Mid,
     slime_Boss,
+    shark_Boss,
+    grape_Boss,
+    bear_Boss,
+    jelly,
+    zigu,
+    smoke,
 }
 public class PoolManager : MonoBehaviour
 {
