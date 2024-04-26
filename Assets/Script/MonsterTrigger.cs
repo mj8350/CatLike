@@ -5,12 +5,20 @@ using UnityEngine;
 public class MonsterTrigger : MonoBehaviour, IDamage
 {
 	private MonsterChar monster;
+	private Vector3 vec;
 	private void Awake()
 	{
 		monster = transform.GetComponentInParent<MonsterChar>();
 	}
 
-	public void TakeDamage(float damage)
+    private void Update()
+    {
+		vec = monster.transform.position;
+		vec.y += 0.5f;
+		transform.position = vec;
+    }
+
+    public void TakeDamage(float damage)
 	{
 		Debug.Log($"몬스터가 {damage}의 데미지를 입음");
 		monster.HP -= damage;

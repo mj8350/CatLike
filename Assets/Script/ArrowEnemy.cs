@@ -31,5 +31,15 @@ public class ArrowEnemy : PoolLabel
                 ReturnPool();
             }
         }
+        if (collision.CompareTag("Wall") || collision.CompareTag("Object"))
+        {
+            obj = PoolManager.Inst.pools[(int)PoolState.boom].Pop();
+            obj.transform.position = transform.position;
+            if (obj.TryGetComponent<Boom>(out Boom boom))
+            {
+                boom.BoomOff();
+            }
+            ReturnPool();
+        }
     }
 }

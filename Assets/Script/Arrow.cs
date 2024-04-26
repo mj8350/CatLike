@@ -30,5 +30,8 @@ public class Arrow : PoolLabel
             damage.TakeDamage(5);
             ReturnPool();
         }
+
+        if (collision.CompareTag("Wall") || collision.CompareTag("Object"))
+            ReturnPool();
     }
 }

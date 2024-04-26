@@ -126,6 +126,9 @@ public class Projectile : PoolLabel
 
 			}
 		}
+
+		if (collision.CompareTag("Wall")||collision.CompareTag("Object"))
+			ReturnPool();
 	}
 
 }

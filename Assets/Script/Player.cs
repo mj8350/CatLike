@@ -69,7 +69,7 @@ public class Player : MonoBehaviour, IDamage
     {
         //Debug.Log(stamina);
 
-        transform.position = new Vector2(Mathf.Clamp(transform.position.x, -8.5f, 8.5f), Mathf.Clamp(transform.position.y, -4.9f, 3.8f));
+        //transform.position = new Vector2(Mathf.Clamp(transform.position.x, -8.5f, 8.5f), Mathf.Clamp(transform.position.y, -4.9f, 3.8f));
         moveDir.x = Input.GetAxisRaw("Horizontal");
         moveDir.y = Input.GetAxisRaw("Vertical");
 
@@ -337,7 +337,7 @@ public class Player : MonoBehaviour, IDamage
     private IEnumerator Miss(Vector3 vec)
     {
         knife01 = false;
-        while (!move)
+        while (!move&&!wall)
         {
             transform.position += vec.normalized * Time.deltaTime * (moveSpeed + 5f);
             yield return null;
@@ -387,4 +387,21 @@ public class Player : MonoBehaviour, IDamage
     {
         Debug.Log($"{damage}만큼의 데미지를 입음");
     }
+
+    public bool wall = false;
+    /*private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            wall = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            wall = false;
+        }
+    }*/
 }

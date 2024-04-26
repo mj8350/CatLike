@@ -1202,6 +1202,7 @@ public class MonsterAttack : MonoBehaviour
             }
             yield return YieldInstructionCache.WaitForSeconds(0.5f);
         }
+        transform.position = new Vector3(0, 100f, 0);
         obj = PoolManager.Inst.pools[(int)PoolState.warning].Pop();
         obj.transform.position = player.position;
         Vector3 pos = obj.transform.position;

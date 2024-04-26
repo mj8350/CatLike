@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class CameraResolution : MonoBehaviour
 {
+
+    [SerializeField]
+    Vector2 mapSize;
+
+    [SerializeField]
+    private GameObject player;
+
+    float cameraMoveSpeed = 7f;
+    float height;
+    float width;
+
     private void Awake()
     {
         Camera camera = GetComponent<Camera>();
@@ -21,5 +32,30 @@ public class CameraResolution : MonoBehaviour
             rect.x = (1f - scalewidth) / 2f;
         }
         camera.rect = rect;
+
+
+        height = Camera.main.orthographicSize;//카메라의 세로길이 구하기
+        width = height * Screen.width / Screen.height;//카메라의 가로길이 구하기
+
+    }
+
+    private void FixedUpdate()
+    {
+        LimitCameraArea();
+    }
+
+    void LimitCameraArea()
+    {
+
+        transform.position = Vector3.Lerp(transform.position,
+                                          player.transform.position,
+                                          Time.deltaTime * cameraMoveSpeed);
+        float lx = mapSize.x - width;
+        float clampX = Mathf.Clamp(transform.position.x, -lx, lx);
+
+        float ly = mapSize.y - height;
+        float clampY = Mathf.Clamp(transform.position.y, -ly, ly);
+
+        transform.position = new Vector3(clampX, clampY, -10f);
     }
 }
