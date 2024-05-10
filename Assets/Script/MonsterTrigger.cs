@@ -24,12 +24,12 @@ public class MonsterTrigger : MonoBehaviour, IDamage
 		monster.HP -= damage;
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	/*private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (collision.gameObject.TryGetComponent<IDamage>(out IDamage damage))
 		{
 			damage.TakeDamage(5f);
 		}
-	}
+	}*/
 
 }
