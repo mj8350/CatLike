@@ -30,7 +30,7 @@ public class TwoAi : MonoBehaviour
     }
 	private void Start()
 	{
-        Creat();
+        //Creat();
     }
 
 	public void Creat()

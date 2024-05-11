@@ -66,7 +66,7 @@ public class Player : MonoBehaviour, IDamage
     {
         //Debug.Log(stamina);
 
-        //transform.position = new Vector2(Mathf.Clamp(transform.position.x, -8.5f, 8.5f), Mathf.Clamp(transform.position.y, -4.9f, 3.8f));
+        transform.position = new Vector2(Mathf.Clamp(transform.position.x, -11.7f, 11.7f), Mathf.Clamp(transform.position.y, -8f, 7f));
         moveDir.x = Input.GetAxisRaw("Horizontal");
         moveDir.y = Input.GetAxisRaw("Vertical");
 
