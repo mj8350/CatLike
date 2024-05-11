@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 398799309855621434}
   - component: {fileID: 2548309004146342546}
   - component: {fileID: 7626661515234349164}
-  - component: {fileID: 5617871588663330231}
+  - component: {fileID: 121065362179236967}
   m_Layer: 11
   m_Name: ShootPos
   m_TagString: Untagged
@@ -433,8 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27902b3bc9e466f44a39c353354dd058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &5617871588663330231
-BoxCollider2D:
+--- !u!58 &121065362179236967
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -462,19 +462,9 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0, y: 0.1}
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.6}
-  m_EdgeRadius: 0
+  m_Radius: 0.8

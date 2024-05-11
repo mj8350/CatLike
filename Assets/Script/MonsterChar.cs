@@ -22,9 +22,8 @@ public class MonsterChar : PoolLabel
 	{
 		if (HP <= 0)
 		{
-			StartCoroutine("Die");
-			//Destroy(gameObject);
 			
+			StartCoroutine("Die");
 		}
 	}
 
@@ -34,6 +33,8 @@ public class MonsterChar : PoolLabel
 		obj.transform.position = transform.GetChild(0).position;
 		obj.transform.localScale = transform.localScale / 2;
 		yield return YieldInstructionCache.WaitForSeconds(0.1f);
+		GameManager.Instance.PlayerData.EXP+=5 ;
+		GameManager.Instance.PlayerData.Gold++;
 		ReturnPool();
 		HP = MaxHP;
 	}

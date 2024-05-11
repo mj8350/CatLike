@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3689653639355303756}
   - component: {fileID: 5672084549912722809}
   - component: {fileID: 1574510924}
-  - component: {fileID: 7601974529140208992}
+  - component: {fileID: 8598198275567469470}
   m_Layer: 11
   m_Name: ShootPos
   m_TagString: Untagged
@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27902b3bc9e466f44a39c353354dd058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &7601974529140208992
-BoxCollider2D:
+--- !u!58 &8598198275567469470
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,19 +105,9 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0, y: 0.1}
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.6}
-  m_EdgeRadius: 0
+  m_Radius: 0.8
 --- !u!1 &3689653640348814504
 GameObject:
   m_ObjectHideFlags: 0

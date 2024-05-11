@@ -11,7 +11,7 @@ public class CameraResolution : MonoBehaviour
     [SerializeField]
     private GameObject player;
 
-    float cameraMoveSpeed = 7f;
+    float cameraMoveSpeed = 5f;
     float height;
     float width;
 

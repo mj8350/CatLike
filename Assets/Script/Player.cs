@@ -27,9 +27,7 @@ public class Player : MonoBehaviour, IDamage
     private bool flag;
 
     public bool stance;//어떤 무기를 들고있는지(true: bow, false: knife)
-    public float stamina;
     public float stamina_f;
-    public float stamina_max;
     public float stamina_heal;
 
     void Awake()
@@ -53,10 +51,9 @@ public class Player : MonoBehaviour, IDamage
         knife01 = true;
         knife02 = false;
         flag = false;
-        stamina_max = 10000;
-        stamina_heal = 1;
-        stamina = stamina_max;
-        stamina_f = stamina;
+        stamina_heal = 4;
+        GameManager.Instance.PlayerData.Stamina = 200;
+        stamina_f = GameManager.Instance.PlayerData.Stamina;
 
         At1.Stop();
         At2.Stop();
@@ -64,7 +61,7 @@ public class Player : MonoBehaviour, IDamage
         StartCoroutine("stdown");
         StartCoroutine("stup");
     }
-
+    
     void Update()
     {
         //Debug.Log(stamina);
@@ -76,14 +73,20 @@ public class Player : MonoBehaviour, IDamage
         if (!bow && Input.GetKeyDown(KeyCode.R))
         {
             if (stance)
+            {
                 stance = false;
+                GameManager.Instance.STANCE(1);
+            }
             else
+            {
                 stance = true;
+                GameManager.Instance.STANCE(2);
+            }
         }
 
-        if (stance && stamina>2 &&Input.GetMouseButton(0))
+        if (stance && GameManager.Instance.PlayerData.Stamina > 2 &&Input.GetMouseButton(0))
         {
-            if (stamina < 3)
+            if (GameManager.Instance.PlayerData.Stamina < 3)
             {
                 bow = false;
                 anim.SetBool("BowAttack", false);
@@ -92,7 +95,6 @@ public class Player : MonoBehaviour, IDamage
             else
             {
                 GetMouse();
-                STdown();
                 bow = true;
                 anim.SetBool("BowAttack", true);
             }
@@ -104,7 +106,7 @@ public class Player : MonoBehaviour, IDamage
         }
         
 
-        if(stamina >3&&!stance && knife01&& Input.GetMouseButtonDown(0))
+        if(GameManager.Instance.PlayerData.Stamina > 3&&!stance && knife01&& Input.GetMouseButtonDown(0))
         {
             move = false;
             knife01 = false;
@@ -114,7 +116,7 @@ public class Player : MonoBehaviour, IDamage
             StartCoroutine("Knife01");
             At1.Play();
         }
-        if(stamina > 3 && knife02 && Input.GetMouseButtonDown(0))
+        if(GameManager.Instance.PlayerData.Stamina > 3 && knife02 && Input.GetMouseButtonDown(0))
         {
             knife02 = false;
             GetMouse();
@@ -124,7 +126,21 @@ public class Player : MonoBehaviour, IDamage
         }
 
         
+        if (move && bow)
+        {
+            Space(moveDir);
+        }
+        else if (move)
+        {
+            if (moveDir.x != 0 || moveDir.y != 0)
+            {
+                Space(moveDir);
+            }
+        }
 
+    }
+    private void FixedUpdate()
+    {
         if (!knife01 || knife02)
         {
             if (flag)
@@ -133,7 +149,7 @@ public class Player : MonoBehaviour, IDamage
         else if (move && bow)
         {
             transform.position += moveDir.normalized * Time.deltaTime * (moveSpeed - 3f);
-            Space(moveDir);
+            //Space(moveDir);
 
         }
         else if (move)
@@ -144,19 +160,11 @@ public class Player : MonoBehaviour, IDamage
                 transform.position += moveDir.normalized * Time.deltaTime * moveSpeed;
 
                 anim.SetFloat("MotionDir", MoveResult());
-                Space(moveDir);
+                //Space(moveDir);
             }
             else
                 anim.SetBool("Move", false);
         }
-
-
-        if (stamina_f == stamina&&stamina_f<stamina_max)
-        {
-            //StartCoroutine("stup");
-        }
-
-
     }
 
     private Vector3 hitSize = new Vector3(2.5f, 4.5f, 0f);
@@ -235,7 +243,7 @@ public class Player : MonoBehaviour, IDamage
 
     private void Space(Vector3 vector)
     {
-        if (miss && stamina>10 && Input.GetKeyDown(KeyCode.Space))
+        if (miss && GameManager.Instance.PlayerData.Stamina > 10 && Input.GetKeyDown(KeyCode.Space))
         {
             miss = false;
             move = false;
@@ -248,32 +256,22 @@ public class Player : MonoBehaviour, IDamage
 
     private void STdown(float st)
     {
-        //StopCoroutine("stup");
-        if (stamina > 0)
+        if (GameManager.Instance.PlayerData.Stamina > 0)
         {
-            stamina -= st;
-            //stamina_f = stamina;
+            GameManager.Instance.PlayerData.Stamina -= st;
         }
         else
             Debug.Log("stamina 부족");
-        //StartCoroutine("stup");
     }
-    private void STdown()
-    {
-        //StopCoroutine("stup");
 
-        //StartCoroutine("stdown");
-
-    }
-    //여기부터 작업해야됨---------------------스태미나 보우 0.5초당 1씩 닳도록 구현
     private IEnumerator stdown()
     {
         while (true)
         {
-            if (bow&&stamina>2)
+            if (bow&& GameManager.Instance.PlayerData.Stamina > 2)
             {
                 //Debug.Log("공격");
-                stamina -= 1;
+                GameManager.Instance.PlayerData.Stamina -= 1;
                 obj = PoolManager.Inst.pools[(int)PoolState.bow].Pop();
                 bowPos = transform.position;
                 bowPos.y += 0.5f;
@@ -291,34 +289,29 @@ public class Player : MonoBehaviour, IDamage
         }
     }
 
-    /*private void STup()
-    {
-        StartCoroutine("stup");
-    }*/
-
     private IEnumerator stup()
     {
         while (true)
         {
-            stamina_f = stamina;
+            stamina_f = GameManager.Instance.PlayerData.Stamina;
             yield return YieldInstructionCache.WaitForSeconds(1f);
 
-            if (stamina_f == stamina && stamina_f < stamina_max)
+            if (stamina_f == GameManager.Instance.PlayerData.Stamina && stamina_f < GameManager.Instance.PlayerData.MaxStamina)
             {
                 //yield return YieldInstructionCache.WaitForSeconds(1f);
 
-                while (stamina < stamina_max)
+                while (GameManager.Instance.PlayerData.Stamina < GameManager.Instance.PlayerData.MaxStamina)
                 {
-                    stamina += stamina_heal;
-                    stamina_f = stamina;
+                    GameManager.Instance.PlayerData.Stamina += stamina_heal;
+                    stamina_f = GameManager.Instance.PlayerData.Stamina;
                     yield return YieldInstructionCache.WaitForSeconds(0.05f);
-                    if (stamina_f != stamina)
+                    if (stamina_f != GameManager.Instance.PlayerData.Stamina)
                         break;
                 }
-                if (stamina > stamina_max)
+                if (GameManager.Instance.PlayerData.Stamina > GameManager.Instance.PlayerData.MaxStamina)
                 {
-                    stamina = stamina_max;
-                    stamina_f = stamina;
+                    GameManager.Instance.PlayerData.Stamina = GameManager.Instance.PlayerData.MaxStamina;
+                    stamina_f = GameManager.Instance.PlayerData.Stamina;
                 }
             }
             else
@@ -386,6 +379,7 @@ public class Player : MonoBehaviour, IDamage
     public void TakeDamage(float damage)
     {
         Debug.Log($"{damage}만큼의 데미지를 입음");
+        GameManager.Instance.PlayerData.HP -= damage;
     }
 
     public bool wall = false;
