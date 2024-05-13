@@ -6,3 +6,8 @@ public interface IDamage
 {
     public void TakeDamage(float damage);
 }
+
+public interface AI
+{
+    public void Creat();
+}

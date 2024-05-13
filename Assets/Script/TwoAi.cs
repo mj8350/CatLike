@@ -8,7 +8,7 @@ public enum TwoState
     Attack,
 }
 
-public class TwoAi : MonoBehaviour
+public class TwoAi : MonoBehaviour,AI
 {
     private TwoState State;
     private MonsterMove movement;
@@ -27,10 +27,6 @@ public class TwoAi : MonoBehaviour
             Debug.Log("TwoAi.cs - Awake() - movement 참조 실패");
         if (!TryGetComponent<MonsterAttack>(out attack))
             Debug.Log("TwoAi.cs - Awake() - attack 참조 실패");
-    }
-	private void Start()
-	{
-        //Creat();
     }
 
 	public void Creat()

@@ -16,7 +16,7 @@ public class SpawnEX : MonoBehaviour
     {
         obj = PoolManager.Inst.pools[dropdown.value +10].Pop();
         obj.transform.position = Pos;
-        if (obj.TryGetComponent<TwoAi>(out TwoAi ai))
+        if (obj.TryGetComponent<AI>(out AI ai))
             ai.Creat();
     }
 }

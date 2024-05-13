@@ -8,7 +8,7 @@ public enum ZiguState
     Attack1,
     Attack2,
 }
-public class ZiguAi : MonoBehaviour
+public class ZiguAi : MonoBehaviour,AI
 {
     private ZiguState State;
     private MonsterMove movement;
@@ -30,10 +30,7 @@ public class ZiguAi : MonoBehaviour
         if (!TryGetComponent<MonsterChar>(out mstChar))
             Debug.Log("ZiguAi.cs - Awake() - mstChar 참조 실패");
     }
-    private void Start()
-    {
-        Creat();
-    }
+    
 
     public void Creat()
     {

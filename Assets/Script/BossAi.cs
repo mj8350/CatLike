@@ -10,7 +10,7 @@ public enum BossState
     Attack1,
 }
 
-public class BossAi : MonoBehaviour
+public class BossAi : MonoBehaviour,AI
 {
     private BossState State;
     private MonsterAttack attack;
@@ -28,10 +28,7 @@ public class BossAi : MonoBehaviour
         if (!TryGetComponent<MonsterChar>(out mstChar))
             Debug.Log("BossAi.cs - Awake() - mstChar 참조 실패");
     }
-    private void Start()
-    {
-        Creat();
-    }
+    
 
     public void Creat()
     {
