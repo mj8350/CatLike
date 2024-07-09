@@ -17,7 +17,7 @@ public class BearWeapon : MonoBehaviour
 
     private void Awake()
     {
-        obj = transform.root.gameObject;
+        obj = transform.parent.gameObject;
         if (!obj.TryGetComponent<TwoAi>(out ai))
             Debug.Log("BearWeapon.cs - Awake() - ai참조 오류");
         if(!TryGetComponent<SpriteRenderer>(out sr))

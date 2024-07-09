@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour, IDamage
 {
@@ -86,43 +87,55 @@ public class Player : MonoBehaviour, IDamage
 
         if (stance && GameManager.Instance.PlayerData.Stamina > 2 &&Input.GetMouseButton(0))
         {
-            if (GameManager.Instance.PlayerData.Stamina < 3)
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                bow = false;
-                anim.SetBool("BowAttack", false);
+                if (GameManager.Instance.PlayerData.Stamina < 3)
+                {
+                    bow = false;
+                    anim.SetBool("BowAttack", false);
 
-            }
-            else
-            {
-                GetMouse();
-                bow = true;
-                anim.SetBool("BowAttack", true);
+                }
+                else
+                {
+                    GetMouse();
+                    bow = true;
+                    anim.SetBool("BowAttack", true);
+                }
             }
         }
         if (stance && Input.GetMouseButtonUp(0))
         {
-            bow = false;
-            anim.SetBool("BowAttack", false);
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                bow = false;
+                anim.SetBool("BowAttack", false);
+            }
         }
         
 
         if(GameManager.Instance.PlayerData.Stamina > 3&&!stance && knife01&& Input.GetMouseButtonDown(0))
         {
-            move = false;
-            knife01 = false;
-            GetMouse();
-            //anim.SetFloat("MouseDir", MouseResult());
-            anim.SetBool("KnifeAttack01", true);
-            StartCoroutine("Knife01");
-            At1.Play();
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                move = false;
+                knife01 = false;
+                GetMouse();
+                //anim.SetFloat("MouseDir", MouseResult());
+                anim.SetBool("KnifeAttack01", true);
+                StartCoroutine("Knife01");
+                At1.Play();
+            }
         }
         if(GameManager.Instance.PlayerData.Stamina > 3 && knife02 && Input.GetMouseButtonDown(0))
         {
-            knife02 = false;
-            GetMouse();
-            anim.SetBool("KnifeAttack02", true);
-            StartCoroutine("Knife02");
-            At2.Play();
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                knife02 = false;
+                GetMouse();
+                anim.SetBool("KnifeAttack02", true);
+                StartCoroutine("Knife02");
+                At2.Play();
+            }
         }
 
         

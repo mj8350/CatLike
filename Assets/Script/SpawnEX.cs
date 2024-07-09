@@ -10,7 +10,7 @@ public class SpawnEX : MonoBehaviour
 
     private int value = 0;
     private GameObject obj;
-    private Vector3 Pos = new Vector3(5, 3, 0);
+    private Vector3 Pos = new Vector3(-0.5f, 6f, 0);
 
     public void Function_Button()
     {
